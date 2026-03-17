@@ -1,0 +1,26 @@
+.calculator-page {
+  align-items: center;
+}
+
+.calculator-card {
+  width: min(780px, 100%);
+  overflow: hidden;
+}
+
+.calculator-card-header {
+  padding: 18px 24px;
+  color: #ffffff;
+  background: linear-gradient(180deg, #2f63c6 0%, #2d5db8 100%);
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.calculator-card-body {
+  display: grid;
+  gap: 22px;
+  padding: 24px;
+}
+
+.full-width {
+  width: 100%;
+}

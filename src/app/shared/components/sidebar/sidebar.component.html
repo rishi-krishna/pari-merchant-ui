@@ -1,0 +1,26 @@
+<aside class="sidebar" [class.mobile]="mobile()" [class.mobile-open]="mobile() && open()">
+  <div class="sidebar__curve-spacer"></div>
+
+  <nav class="sidebar__nav">
+    @for (section of sections; track section.heading ?? $index) {
+      @if (section.heading) {
+        <p class="sidebar__heading">{{ section.heading }}</p>
+      }
+
+      <div class="sidebar__items">
+        @for (item of section.items; track item.route) {
+          <a
+            class="sidebar__item"
+            [routerLink]="item.route"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+            (click)="onSelect()"
+          >
+            <app-icon [name]="item.icon" [size]="18"></app-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </div>
+    }
+  </nav>
+</aside>

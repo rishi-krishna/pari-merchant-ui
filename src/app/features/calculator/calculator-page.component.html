@@ -1,0 +1,53 @@
+<div class="page-stack calculator-page">
+  <div class="page-title-group">
+    <h1>Commission Calculator</h1>
+    <p>Frontend replica of the calculator card with a live amount breakdown for quick previews.</p>
+  </div>
+
+  <section class="panel calculator-card">
+    <div class="calculator-card-header">Commission Calculator</div>
+
+    <form class="calculator-card-body" [formGroup]="form" (ngSubmit)="calculate()">
+      <div class="field">
+        <label for="calculator-type">Select Type:</label>
+        <select id="calculator-type" formControlName="type">
+          <option value="Payout">Payout</option>
+          <option value="Payment Gateway">Payment Gateway</option>
+          <option value="Wallet Transfer">Wallet Transfer</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="calculator-amount">Enter Amount:</label>
+        <input id="calculator-amount" type="number" formControlName="amount" placeholder="Enter amount" />
+      </div>
+
+      <button class="primary-button full-width" type="submit">Calculate Now</button>
+    </form>
+  </section>
+
+  @if (result(); as calculation) {
+    <section class="summary-grid">
+      <div class="summary-box">
+        <h3>Commission Rate</h3>
+        <p>Applied rate for the selected transaction type</p>
+        <strong>{{ selectedRate() }}%</strong>
+      </div>
+      <div class="summary-box">
+        <h3>Commission</h3>
+        <p>Base commission before tax</p>
+        <strong>{{ calculation.commission }}</strong>
+      </div>
+      <div class="summary-box">
+        <h3>GST on Commission</h3>
+        <p>18% GST added on the commission amount</p>
+        <strong>{{ calculation.gst }}</strong>
+      </div>
+      <div class="summary-box">
+        <h3>Net Settlement</h3>
+        <p>Estimated amount received after charges</p>
+        <strong>{{ calculation.settlement }}</strong>
+      </div>
+    </section>
+  }
+</div>

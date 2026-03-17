@@ -1,0 +1,57 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>KYC Information</h1>
+    <p>Static frontend replica of the merchant KYC detail view with readonly values and proof placeholders.</p>
+  </div>
+
+  <section class="panel feature-panel">
+    <div class="panel-header">
+      <div class="status-badge success">
+        <app-icon name="approved" [size]="16"></app-icon>
+        <span>{{ kyc().status }}</span>
+      </div>
+
+      <button class="primary-button" type="button">
+        <app-icon name="download" [size]="16"></app-icon>
+        <span>Download Signed Document</span>
+      </button>
+    </div>
+
+    <h2 class="section-heading section-center">KYC Information</h2>
+
+    <div class="key-value-grid top-gap">
+      <div class="readonly-field"><span>Name</span><div class="readonly-value">{{ kyc().name }}</div></div>
+      <div class="readonly-field"><span>PAN</span><div class="readonly-value">{{ kyc().pan }}</div></div>
+      <div class="readonly-field"><span>Date of Birth</span><div class="readonly-value">{{ kyc().dateOfBirth }}</div></div>
+      <div class="readonly-field"><span>Aadhaar Number</span><div class="readonly-value">{{ kyc().aadhaarNumber }}</div></div>
+      <div class="readonly-field"><span>Account Holder Name</span><div class="readonly-value">{{ kyc().accountHolderName }}</div></div>
+      <div class="readonly-field"><span>Bank Name</span><div class="readonly-value">{{ kyc().bankName }}</div></div>
+      <div class="readonly-field"><span>Account No</span><div class="readonly-value">{{ kyc().accountNumber }}</div></div>
+      <div class="readonly-field"><span>IFSC Code</span><div class="readonly-value">{{ kyc().ifsc }}</div></div>
+      <div class="readonly-field"><span>Branch</span><div class="readonly-value">{{ kyc().branch }}</div></div>
+      <div class="readonly-field"><span>Company Name</span><div class="readonly-value">{{ kyc().companyName }}</div></div>
+      <div class="readonly-field"><span>Company Type</span><div class="readonly-value">{{ kyc().companyType }}</div></div>
+      <div class="readonly-field"><span>Company GST</span><div class="readonly-value">{{ kyc().companyGst || 'Not provided' }}</div></div>
+      <div class="readonly-field"><span>Company Address</span><div class="readonly-value">{{ kyc().companyAddress }}</div></div>
+      <div class="readonly-field"><span>Company City</span><div class="readonly-value">{{ kyc().companyCity }}</div></div>
+      <div class="readonly-field"><span>Company State</span><div class="readonly-value">{{ kyc().companyState }}</div></div>
+      <div class="readonly-field"><span>Company Pincode</span><div class="readonly-value">{{ kyc().companyPincode }}</div></div>
+      <div class="readonly-field full-width"><span>Company Country</span><div class="readonly-value">{{ kyc().companyCountry }}</div></div>
+    </div>
+
+    <div class="photo-grid top-gap">
+      <div class="photo-card">
+        <h4>Photo</h4>
+        <div class="photo-preview">{{ kyc().merchantPhotoLabel }}</div>
+      </div>
+      <div class="photo-card">
+        <h4>PAN Photo</h4>
+        <div class="photo-preview">{{ kyc().panPhotoLabel }}</div>
+      </div>
+      <div class="photo-card">
+        <h4>Aadhaar Photo</h4>
+        <div class="photo-preview">{{ kyc().aadhaarPhotoLabel }}</div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,56 @@
+.pay-link-card {
+  max-width: 1000px;
+  overflow: hidden;
+}
+
+.pay-link-card__header {
+  padding: 18px 22px;
+  background: linear-gradient(180deg, #2f6ad9 0%, #295fbe 100%);
+  color: #ffffff;
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.pay-link-card__body {
+  display: grid;
+  gap: 22px;
+  padding: 22px;
+}
+
+.pay-link-card__search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 108px;
+}
+
+.pay-link-card__search-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.pay-link-card__search-row input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.pay-link-card__submit {
+  min-height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #97c93c 0%, #88be32 100%);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .pay-link-card__search-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .pay-link-card__search-button,
+  .pay-link-card__search-row input {
+    border-radius: 14px;
+  }
+}

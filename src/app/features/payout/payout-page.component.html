@@ -1,0 +1,86 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>Payout</h1>
+    <p>Send funds only to saved validated beneficiaries. The backend will place a hold and create a payout transaction.</p>
+  </div>
+
+  <section class="panel feature-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">Create Payout</h2>
+      <div class="pill">{{ data.walletAmountLabel() }} available</div>
+    </div>
+
+    <form class="page-stack" [formGroup]="form">
+      <div class="filter-grid two-columns">
+        <div class="field">
+          <label for="payout-beneficiary">Beneficiary</label>
+          <select id="payout-beneficiary" formControlName="beneficiaryId">
+            <option value="">Select beneficiary</option>
+            @for (beneficiary of beneficiaries(); track beneficiary.id) {
+              <option [value]="beneficiary.id">
+                {{ beneficiary.contactName }} | {{ beneficiary.bankName }} | {{ beneficiary.accountNumber }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="payout-amount">Amount</label>
+          <input id="payout-amount" type="number" formControlName="amount" placeholder="Enter amount" />
+        </div>
+
+        <div class="field">
+          <label for="payout-purpose">Purpose</label>
+          <input id="payout-purpose" type="text" formControlName="purpose" placeholder="Settlement purpose" />
+        </div>
+      </div>
+
+      @if (resultMessage()) {
+        <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
+      }
+
+      <div class="form-actions">
+        <button class="primary-button" type="button" (click)="submit()">Create Payout</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">Recent Payouts</h2>
+      <div class="pill">{{ recentPayouts().length }} items</div>
+    </div>
+
+    @if (recentPayouts().length) {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Reference</th>
+              <th>Settlement</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of recentPayouts(); track transaction.id) {
+              <tr>
+                <td>{{ transaction.status }}</td>
+                <td>{{ data.formatCurrency(transaction.amount, transaction.currency) }}</td>
+                <td>{{ transaction.externalReference }}</td>
+                <td>{{ transaction.settlementStatus }}</td>
+                <td>{{ transaction.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <h3>No payouts yet</h3>
+        <p>Create a payout to a validated beneficiary to see it here.</p>
+      </div>
+    }
+  </section>
+</div>

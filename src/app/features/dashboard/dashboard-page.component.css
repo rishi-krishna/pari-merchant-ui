@@ -1,0 +1,119 @@
+.compact {
+  margin-top: 0;
+}
+
+.small {
+  min-height: 40px;
+  padding-inline: 14px;
+  border-radius: 12px;
+}
+
+.white {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2f63c6;
+}
+
+.payment-panel {
+  overflow: hidden;
+}
+
+.payment-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  color: #ffffff;
+  background: linear-gradient(90deg, #2d63c6 0%, #30bde6 100%);
+}
+
+.banner-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.payment-body {
+  padding: 22px;
+}
+
+.payment-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #8a97b5;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.payment-url-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.payment-url {
+  flex: 1;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  border: 1px solid rgba(198, 209, 231, 0.76);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fbfcff, #f6f9ff);
+  font-size: 0.92rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.payment-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.scheme-link-button {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 18px;
+  border: 1px solid rgba(123, 95, 255, 0.4);
+  border-radius: 12px;
+  background: transparent;
+  color: #6941ff;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.centered {
+  justify-items: center;
+  align-items: center;
+}
+
+.qr-modal {
+  width: min(420px, calc(100vw - 28px));
+  padding: 22px;
+}
+
+.qr-box {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(47, 99, 198, 0.12), transparent 34%),
+    linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
+  color: #2f63c6;
+}
+
+@media (max-width: 900px) {
+  .payment-banner,
+  .payment-url-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .payment-actions {
+    flex-wrap: wrap;
+  }
+}

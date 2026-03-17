@@ -1,0 +1,72 @@
+<div class="beneficiary-page">
+  <section class="panel beneficiary-card">
+    <div class="beneficiary-card__header">Create Beneficiary</div>
+
+    <form class="beneficiary-card__body" [formGroup]="form">
+      <div class="field">
+        <label for="beneficiary-phone">Phone Number:</label>
+        <div class="beneficiary-card__search-row">
+          <input id="beneficiary-phone" type="text" formControlName="phoneNumber" placeholder="Enter phone number" />
+          <button class="beneficiary-card__search-button" type="button" (click)="searchContact()">Search</button>
+        </div>
+        @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
+          <p class="error-text">Enter a valid 10 digit phone number.</p>
+        }
+        @if (lookupMessage()) {
+          <p [class.error-text]="!matchedContact()" [class.success-text]="!!matchedContact()">{{ lookupMessage() }}</p>
+        }
+      </div>
+
+      @if (matchedContact(); as contact) {
+        <div class="beneficiary-card__contact-summary">
+          <strong>{{ contact.name }}</strong>
+          <span>{{ contact.phone }} | {{ contact.email }}</span>
+        </div>
+      }
+
+      <div class="field">
+        <label for="beneficiary-bank">Bank Name:</label>
+        <select id="beneficiary-bank" formControlName="bankName">
+          @for (bank of bankOptions; track bank.name) {
+            <option [value]="bank.name">{{ bank.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="beneficiary-ifsc">IFSC Code:</label>
+        <input id="beneficiary-ifsc" type="text" formControlName="ifsc" readonly />
+      </div>
+
+      <div class="field">
+        <label for="beneficiary-account-number">Account Number:</label>
+        <input
+          id="beneficiary-account-number"
+          type="text"
+          formControlName="accountNumber"
+          placeholder="Enter account number"
+        />
+        @if (form.controls.accountNumber.invalid && form.controls.accountNumber.touched) {
+          <p class="error-text">Enter an account number between 8 and 20 digits.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="beneficiary-name">Beneficiary:</label>
+        <input id="beneficiary-name" type="text" formControlName="beneficiary" placeholder="Enter beneficiary name" />
+        @if (form.controls.beneficiary.invalid && form.controls.beneficiary.touched) {
+          <p class="error-text">Beneficiary name is required.</p>
+        }
+      </div>
+
+      @if (accountMessage()) {
+        <p [class.error-text]="!accountValidated()" [class.success-text]="accountValidated()">{{ accountMessage() }}</p>
+      }
+
+      <button class="beneficiary-card__validate-button" type="button" (click)="validateAccount()">
+        Validate Account
+      </button>
+      <button class="beneficiary-card__submit-button" type="button" (click)="addNow()">Add Now</button>
+    </form>
+  </section>
+</div>

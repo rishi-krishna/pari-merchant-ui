@@ -1,0 +1,29 @@
+<article class="payment-card panel">
+  <div class="payment-card__header">
+    <h3>{{ scheme().name }}</h3>
+    <button class="payment-card__action" type="button">Add Money</button>
+  </div>
+
+  <div class="payment-card__body">
+    <div class="warning-pill">Per Transaction Limit: {{ scheme().transactionLimit }}</div>
+
+    <table class="payment-card__table">
+      <thead>
+        <tr>
+          <th>Card Type</th>
+          <th>Commission (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of scheme().commissions; track row.cardType) {
+          <tr>
+            <td>{{ row.cardType }}</td>
+            <td>{{ row.commission }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <button class="payment-card__footer-button" type="button">View Supported Cards</button>
+  </div>
+</article>

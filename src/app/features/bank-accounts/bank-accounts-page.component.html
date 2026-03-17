@@ -1,0 +1,96 @@
+<div class="page-stack">
+  <div class="page-title-row">
+    <div class="page-title-group">
+      <h1>All Bank Accounts</h1>
+      <p>Create bank accounts for saved contacts and search them later by name, phone number, bank name, or IFSC.</p>
+    </div>
+
+    <button class="primary-button" type="button" (click)="openCreateAccount()">
+      <app-icon name="plus" [size]="16"></app-icon>
+      <span>Create Account</span>
+    </button>
+  </div>
+
+  <section class="panel filter-panel">
+    <h2 class="panel-title">Filter</h2>
+
+    <form class="filter-grid" [formGroup]="filterForm">
+      <div class="field">
+        <label for="account-name-filter">Name</label>
+        <input id="account-name-filter" type="text" formControlName="name" placeholder="Enter Name" />
+      </div>
+      <div class="field">
+        <label for="account-phone-filter">Phone</label>
+        <input id="account-phone-filter" type="text" formControlName="phone" placeholder="Enter Phone" />
+      </div>
+      <div class="field">
+        <label for="account-bank-filter">Bank Name</label>
+        <input id="account-bank-filter" type="text" formControlName="bankName" placeholder="Enter Bank name" />
+      </div>
+      <div class="field">
+        <label for="account-number-filter">Account Number</label>
+        <input id="account-number-filter" type="text" formControlName="accountNumber" placeholder="Enter Account Number" />
+      </div>
+      <div class="field">
+        <label for="account-ifsc-filter">IFSC Code</label>
+        <input id="account-ifsc-filter" type="text" formControlName="ifsc" placeholder="Enter IFSC Code" />
+      </div>
+    </form>
+
+    <div class="form-actions">
+      <button class="primary-button" type="button" (click)="applyFilters()">Filter</button>
+    </div>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">All Links</h2>
+      <div class="pill">{{ accounts().length }} accounts</div>
+    </div>
+
+    @if (accounts().length) {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Contact Name</th>
+              <th>Phone</th>
+              <th>Account Holder Name</th>
+              <th>Account Number</th>
+              <th>Bank Name</th>
+              <th>IFSC</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (account of accounts(); track account.id) {
+              <tr>
+                <td>{{ account.id }}</td>
+                <td>{{ account.contactName }}</td>
+                <td>{{ account.phone }}</td>
+                <td>{{ account.accountHolderName }}</td>
+                <td>{{ account.accountNumber }}</td>
+                <td>{{ account.bankName }}</td>
+                <td>{{ account.ifsc }}</td>
+                <td>
+                  <button class="inline-action danger" type="button" (click)="deleteAccount(account.id)">
+                    <app-icon name="delete" [size]="16"></app-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-illustration">
+          <app-icon name="bank" [size]="54"></app-icon>
+        </div>
+        <h3>No bank accounts match the current filters</h3>
+        <p>Create an account or adjust the filters.</p>
+      </div>
+    }
+  </section>
+</div>

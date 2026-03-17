@@ -1,0 +1,85 @@
+<div class="page-stack">
+  <div class="page-title-row">
+    <div class="page-title-group">
+      <h1>All Bills</h1>
+      <p>Transaction history view matching the Bharat Connect style with searchable bill and reference data.</p>
+    </div>
+
+    <div class="brand-mark">
+      <strong>B</strong>
+      <span>Bharat</span>
+      <span>Connect</span>
+    </div>
+  </div>
+
+  <section class="panel filter-panel">
+    <h2 class="panel-title">Filter</h2>
+
+    <form class="filter-grid" [formGroup]="filterForm">
+      <div class="field">
+        <label for="bill-mobile">Mobile Number</label>
+        <input id="bill-mobile" type="text" formControlName="mobileNumber" placeholder="Mobile Number" />
+      </div>
+      <div class="field">
+        <label for="bill-payment-ref">Payment Ref Id</label>
+        <input id="bill-payment-ref" type="text" formControlName="paymentRefId" placeholder="Enter Payment Ref Id" />
+      </div>
+      <div class="field">
+        <label for="bill-approval-ref">Approval Ref Num</label>
+        <input id="bill-approval-ref" type="text" formControlName="approvalRefNum" placeholder="Enter Approval Ref Num" />
+      </div>
+      <div class="field">
+        <label for="bill-transaction-ref">Transaction Reference ID</label>
+        <input id="bill-transaction-ref" type="text" formControlName="transactionReferenceId" placeholder="Enter Transaction Reference ID" />
+      </div>
+      <div class="field">
+        <label for="bill-status">Status</label>
+        <input id="bill-status" type="text" formControlName="status" placeholder="Enter Status" />
+      </div>
+      <div class="field">
+        <label for="bill-date-range">Select Date</label>
+        <input id="bill-date-range" type="text" formControlName="dateRange" placeholder="Select range of dates" />
+      </div>
+    </form>
+
+    <div class="form-actions">
+      <button class="primary-button" type="button" (click)="applyFilters()">Filter</button>
+    </div>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">All Bills</h2>
+      <div class="pill">{{ bills().length }} entries</div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>TXN Reference ID</th>
+            <th>Biller Name</th>
+            <th>Biller Category</th>
+            <th>Amount</th>
+            <th>Reference ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bill of bills(); track bill.id) {
+            <tr>
+              <td>{{ bill.id }}</td>
+              <td>{{ bill.date }}</td>
+              <td><span class="inline-link">{{ bill.paymentRefId }}</span></td>
+              <td>{{ bill.billerName }}</td>
+              <td>{{ bill.billerCategory }}</td>
+              <td>{{ bill.amount }}</td>
+              <td>{{ bill.referenceId }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

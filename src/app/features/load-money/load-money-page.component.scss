@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+.load-money__flow-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.load-money__flow-button--active {
+  color: #ffffff;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border-color: transparent;
+}

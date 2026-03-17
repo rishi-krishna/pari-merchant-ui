@@ -1,0 +1,16 @@
+.page-action-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.complaint-empty {
+  min-height: 260px;
+}
+
+@media (max-width: 900px) {
+  .page-action-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

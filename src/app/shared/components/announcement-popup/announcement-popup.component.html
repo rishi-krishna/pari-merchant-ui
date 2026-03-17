@@ -1,0 +1,23 @@
+@if (visible()) {
+  <div class="modal-overlay centered" (click)="close()">
+    <section class="announcement panel" (click)="$event.stopPropagation()">
+      <button class="announcement__close" type="button" (click)="close()">×</button>
+
+      <div class="announcement__copy">
+        <span class="announcement__eyebrow">Announcement</span>
+        <h2>{{ announcement().title }}</h2>
+        <p>{{ announcement().message }}</p>
+      </div>
+
+      <div class="announcement__banner">
+        <div class="announcement__banner-mark">
+          <app-icon name="dashboard" [size]="44"></app-icon>
+        </div>
+        <div>
+          <strong>{{ announcement().bannerTitle }}</strong>
+          <span>{{ announcement().bannerSubtitle }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+}

@@ -1,0 +1,16 @@
+<article class="stat-card" [class.gold]="variant() === 'gold'" [class.blue]="variant() === 'blue'">
+  <div>
+    <p>{{ title() }}</p>
+    <div class="stat-card__value">{{ value() }}</div>
+    @if (subtitle()) {
+      <span class="stat-card__subtitle">{{ subtitle() }}</span>
+    }
+  </div>
+
+  <div class="stat-card__side">
+    <app-icon [name]="icon()" [size]="34"></app-icon>
+    @if (actionLabel()) {
+      <button class="stat-card__button" type="button">{{ actionLabel() }}</button>
+    }
+  </div>
+</article>

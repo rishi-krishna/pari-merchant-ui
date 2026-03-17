@@ -1,0 +1,100 @@
+<div class="page-stack">
+  <div class="dashboard-home__title-row">
+    <h1>Dashboard</h1>
+
+    <div class="dashboard-home__actions">
+      <button class="primary-button dashboard-home__action-button" type="button" (click)="openLoadMoney()">+ Load Money</button>
+      <button class="primary-button dashboard-home__action-button" type="button" (click)="openPayout()">+ Payout</button>
+    </div>
+  </div>
+
+  <section class="panel dashboard-home__payment-link">
+    <div class="dashboard-home__payment-banner">
+      <div class="dashboard-home__payment-banner-title">
+        <span class="dashboard-home__chain-icon">Link</span>
+        <span>Your Unique Payment Link</span>
+      </div>
+
+      <button class="dashboard-home__share-button" type="button">Share with customers</button>
+    </div>
+
+    <div class="dashboard-home__payment-body">
+      <label class="dashboard-home__payment-label">PUBLIC URL</label>
+
+      <div class="dashboard-home__payment-row">
+        <div class="dashboard-home__payment-url">{{ paymentLink }}</div>
+
+        <div class="dashboard-home__payment-buttons">
+          <button class="dashboard-home__copy-button" type="button" (click)="copyLink()">Copy</button>
+          <button class="dashboard-home__outline-button" type="button" (click)="openLink()">Open</button>
+          <button class="dashboard-home__outline-button" type="button" (click)="toggleQr()">Show QR</button>
+        </div>
+      </div>
+
+      <p class="dashboard-home__payment-note">Send this link to customers to collect payments directly.</p>
+    </div>
+  </section>
+
+  <section class="dashboard-home__overview">
+    <app-stat-card title="Wallet Amount" [value]="walletAmount()" icon="wallet" variant="gold"></app-stat-card>
+
+    <app-stat-card title="Held Balance" [value]="heldAmount()" icon="rupee" variant="blue" actionLabel="Add Money"></app-stat-card>
+  </section>
+
+  <section class="dashboard-home__cards">
+    @for (scheme of schemes; track scheme.id) {
+      <app-payment-card [scheme]="scheme"></app-payment-card>
+    }
+  </section>
+
+  @if (transactions().length) {
+    <section class="panel table-panel">
+      <div class="panel-header">
+        <h2 class="section-heading">Recent Transactions</h2>
+        <div class="pill">{{ transactions().length }} recent</div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Reference</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of transactions(); track transaction.id) {
+              <tr>
+                <td>{{ transaction.transactionType }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>{{ data.formatCurrency(transaction.amount, transaction.currency) }}</td>
+                <td>{{ transaction.externalReference }}</td>
+                <td>{{ transaction.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</div>
+
+<app-announcement-popup
+  [announcement]="announcement"
+  [visible]="announcementVisible()"
+  (closed)="hideAnnouncement()"
+></app-announcement-popup>
+
+@if (qrOpen()) {
+  <div class="modal-overlay centered" (click)="toggleQr()">
+    <section class="dashboard-home__qr-modal panel" (click)="$event.stopPropagation()">
+      <button class="modal-close" type="button" (click)="toggleQr()">X</button>
+      <h2 class="section-heading">Payment QR Preview</h2>
+      <div class="dashboard-home__qr-box">QR</div>
+      <p class="dashboard-home__payment-note">{{ paymentLink }}</p>
+    </section>
+  </div>
+}

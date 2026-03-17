@@ -1,0 +1,142 @@
+.mpin-shell {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1d3557 0%, #17304f 100%);
+}
+
+.mpin-shell__backdrop {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(242, 199, 97, 0.95);
+}
+
+.mpin-shell__eyebrow {
+  position: absolute;
+  top: 36px;
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 700;
+}
+
+.mpin-shell__emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(520px, 72vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 12px solid rgba(242, 199, 97, 0.95);
+}
+
+.mpin-shell__emblem::before,
+.mpin-shell__emblem::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 46%;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(242, 199, 97, 0.95);
+}
+
+.mpin-shell__emblem::before {
+  left: -47%;
+}
+
+.mpin-shell__emblem::after {
+  right: -47%;
+}
+
+.mpin-shell__emblem-core {
+  display: grid;
+  place-items: center;
+  width: 54%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid rgba(242, 199, 97, 0.95);
+  background: #33291c;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  font-weight: 700;
+}
+
+.mpin-card {
+  position: relative;
+  z-index: 1;
+  width: min(500px, 100%);
+  padding: 32px;
+  text-align: center;
+}
+
+.mpin-card__header {
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    color: #30436f;
+    font-size: 2.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+}
+
+.mpin-card__avatar {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  margin: 26px auto;
+  border: 6px solid #ffffff;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c1ca87, #dde1c0);
+  color: #2f3e21;
+  font-size: 2rem;
+  font-weight: 700;
+  box-shadow: 0 20px 40px rgba(36, 55, 98, 0.12);
+}
+
+.mpin-card__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-field {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  color: #8b94ac;
+
+  input {
+    min-height: 52px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0 16px;
+  }
+}
+
+.mpin-card__submit {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.auth-link {
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  justify-content: center;
+}

@@ -1,0 +1,79 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>Commission Structure</h1>
+    <p>Replica of the filterable commission structure table with the same two-panel layout from the screenshot.</p>
+  </div>
+
+  <section class="panel filter-panel">
+    <h2 class="panel-title">Filter</h2>
+
+    <form class="filter-grid two-columns" [formGroup]="filterForm">
+      <div class="field">
+        <label for="gateway">Select Gateway</label>
+        <select id="gateway" formControlName="gateway">
+          <option value="">Select Gateway</option>
+          @for (gateway of gateways; track gateway) {
+            <option [value]="gateway">{{ gateway }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="card-type">Card Type</label>
+        <input id="card-type" type="text" formControlName="cardType" placeholder="Enter Card type" />
+      </div>
+
+      <div class="field">
+        <label for="card-issuer">Card Issuer</label>
+        <input id="card-issuer" type="text" formControlName="cardIssuer" placeholder="Select Card Issuer" />
+      </div>
+
+      <div class="field">
+        <label for="partner">PG Partner</label>
+        <input id="partner" type="text" formControlName="partner" placeholder="Enter PG Partner" />
+      </div>
+    </form>
+
+    <div class="form-actions">
+      <button class="primary-button" type="button" (click)="applyFilters()">Filter</button>
+    </div>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">All Methods</h2>
+      <div class="pill">{{ methods().length }} rows</div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Gateway</th>
+            <th>From</th>
+            <th>To</th>
+            <th>PG Partner</th>
+            <th>Card Type</th>
+            <th>Card Issuer</th>
+            <th>Total Commission</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of methods(); track row.id) {
+            <tr>
+              <td>{{ row.id }}</td>
+              <td>{{ row.gateway }}</td>
+              <td>{{ row.from }}</td>
+              <td>{{ row.to }}</td>
+              <td>{{ row.partner }}</td>
+              <td>{{ row.cardType }}</td>
+              <td>{{ row.cardIssuer }}</td>
+              <td>{{ row.totalCommission }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

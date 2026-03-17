@@ -1,0 +1,40 @@
+<div class="mpin-shell">
+  <div class="mpin-shell__backdrop">
+    <span class="mpin-shell__eyebrow">WELCOME TO</span>
+    <div class="mpin-shell__emblem">
+      <div class="mpin-shell__emblem-core">SLPE</div>
+    </div>
+  </div>
+
+  <section class="mpin-card panel">
+    <div class="mpin-card__header">
+      <h1>
+        <app-icon name="lock" [size]="28"></app-icon>
+        <span>ENTER MPIN</span>
+      </h1>
+      <p>Please enter your 6-digit MPIN to access dashboard</p>
+    </div>
+
+    <div class="mpin-card__avatar">BK</div>
+
+    <form class="mpin-card__form" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="auth-field">
+        <app-icon name="key" [size]="18"></app-icon>
+        <input type="password" formControlName="mpin" maxlength="6" placeholder="Enter MPIN" />
+      </div>
+
+      @if (form.controls.mpin.invalid && form.controls.mpin.touched) {
+        <p class="error-text">MPIN must contain exactly 6 digits.</p>
+      }
+      @if (errorMessage()) {
+        <p class="error-text">{{ errorMessage() }}</p>
+      }
+
+      <button class="primary-button mpin-card__submit" type="submit" [disabled]="auth.loading()">
+        {{ auth.loading() ? 'Verifying...' : 'Continue' }}
+      </button>
+      <button class="auth-link" type="button">Forget MPIN</button>
+      <button class="auth-link" type="button" (click)="logout()">Logout</button>
+    </form>
+  </section>
+</div>

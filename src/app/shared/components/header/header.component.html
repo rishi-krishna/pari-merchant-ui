@@ -1,0 +1,59 @@
+<header class="header">
+  <div class="header__brand">
+    <div class="header__brand-mark">SL</div>
+    <div class="header__brand-copy">
+      <span class="header__brand-text">SLPE</span>
+    </div>
+  </div>
+
+  <div class="header__actions">
+    <div class="header__info-link">
+      <app-icon name="user-circle" [size]="18"></app-icon>
+      <span>{{ auth.userId() }}</span>
+    </div>
+
+    <div class="header__info-link">
+      <app-icon name="wallet" [size]="18"></app-icon>
+      <span>{{ data.walletAmountLabel() }}</span>
+    </div>
+
+    <button class="header__plain-icon" type="button" aria-label="Add action">
+      <app-icon name="plus" [size]="18"></app-icon>
+    </button>
+
+    <button class="header__plain-icon" type="button" aria-label="Notifications">
+      <app-icon name="bell" [size]="18"></app-icon>
+      <span class="header__notification-dot"></span>
+    </button>
+
+    <div class="header__profile" (click)="$event.stopPropagation()">
+      <button class="header__avatar-button" type="button" (click)="toggleProfile($event)">
+        <span class="header__avatar">{{ auth.avatarInitials() }}</span>
+      </button>
+
+      @if (profileOpen()) {
+        <div class="header__profile-menu">
+          <div class="header__profile-card">
+            <p class="header__welcome">Welcome {{ auth.userId() }}</p>
+            <div class="header__profile-summary">
+              <div class="header__avatar header__avatar--large">{{ auth.avatarInitials() }}</div>
+              <div>
+                <strong>{{ auth.profileName() }}</strong>
+                <span>{{ auth.profileRole() }}</span>
+              </div>
+            </div>
+
+            <button class="header__profile-action" type="button">
+              <app-icon name="user" [size]="16"></app-icon>
+              <span>My Profile</span>
+            </button>
+            <button class="header__profile-action" type="button" (click)="logout()">
+              <app-icon name="logout" [size]="16"></app-icon>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</header>

@@ -1,0 +1,137 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>Load Money</h1>
+    <p>Use customer card collection or merchant self-topup to create wallet funding transactions against the live backend.</p>
+  </div>
+
+  <section class="panel feature-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">Wallet Snapshot</h2>
+      <div class="pill-row">
+        <div class="pill">Available: {{ data.walletAmountLabel() }}</div>
+        <div class="pill">Held: {{ data.heldAmountLabel() }}</div>
+      </div>
+    </div>
+
+    <div class="load-money__flow-switch">
+      <button
+        class="ghost-button"
+        type="button"
+        [class.load-money__flow-button--active]="flow() === 'collection'"
+        (click)="setFlow('collection')"
+      >
+        Customer Card Collection
+      </button>
+      <button
+        class="ghost-button"
+        type="button"
+        [class.load-money__flow-button--active]="flow() === 'self-topup'"
+        (click)="setFlow('self-topup')"
+      >
+        Merchant Self Topup
+      </button>
+    </div>
+
+    <form class="page-stack" [formGroup]="form">
+      <div class="filter-grid two-columns">
+        @if (flow() === 'collection') {
+          <div class="field">
+            <label for="load-money-customer-name">Customer Name</label>
+            <input id="load-money-customer-name" type="text" formControlName="customerName" placeholder="Enter customer name" />
+          </div>
+        }
+
+        <div class="field">
+          <label for="load-money-amount">Amount</label>
+          <input id="load-money-amount" type="number" formControlName="amount" placeholder="Enter amount" />
+        </div>
+
+        <div class="field">
+          <label for="load-money-card-brand">Card Brand</label>
+          <select id="load-money-card-brand" formControlName="cardBrand">
+            <option value="Visa">Visa</option>
+            <option value="Mastercard">Mastercard</option>
+            <option value="RuPay">RuPay</option>
+            <option value="Amex">Amex</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="load-money-card-number">Masked Card Number</label>
+          <input
+            id="load-money-card-number"
+            type="text"
+            formControlName="maskedCardNumber"
+            placeholder="411111XXXXXX1111"
+          />
+        </div>
+
+        <div class="field">
+          <label for="load-money-provider-ref">Provider Token Reference</label>
+          <input
+            id="load-money-provider-ref"
+            type="text"
+            formControlName="providerTokenReference"
+            placeholder="tok_demo_001"
+          />
+        </div>
+
+        <div class="field">
+          <label for="load-money-description">Description</label>
+          <input id="load-money-description" type="text" formControlName="description" placeholder="Description" />
+        </div>
+      </div>
+
+      @if (resultMessage()) {
+        <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
+      }
+
+      <div class="form-actions">
+        <button class="primary-button" type="button" (click)="submit()">
+          {{ flow() === 'collection' ? 'Initiate Collection' : 'Initiate Self Topup' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">Recent Load-Money Transactions</h2>
+      <div class="pill">{{ recentTransactions().length }} items</div>
+    </div>
+
+    @if (recentTransactions().length) {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Fee</th>
+              <th>Reference</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of recentTransactions(); track transaction.id) {
+              <tr>
+                <td>{{ transaction.transactionType }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>{{ data.formatCurrency(transaction.amount, transaction.currency) }}</td>
+                <td>{{ data.formatCurrency(transaction.feeAmount, transaction.currency) }}</td>
+                <td>{{ transaction.externalReference }}</td>
+                <td>{{ transaction.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <h3>No load-money transactions yet</h3>
+        <p>Submit a customer collection or a self-topup to see records here.</p>
+      </div>
+    }
+  </section>
+</div>
