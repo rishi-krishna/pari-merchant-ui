@@ -36,6 +36,19 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+## Netlify Deployment
+
+This repo is configured for Git-based Netlify deployment through [netlify.toml](/c:/Users/rishi/Desktop/work%20and%20study/AI_Project/PaRiMerchant/pari-merchant-ui/netlify.toml).
+
+Use these settings in Netlify if you configure them manually:
+
+```bash
+Build command: npm run build
+Publish directory: dist/pari-merchant-ui/browser
+```
+
+The config also includes an SPA redirect so Angular routes resolve correctly in production.
+
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
