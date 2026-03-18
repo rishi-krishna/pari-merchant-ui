@@ -1,13 +1,14 @@
-import { DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { cashfreeHostedCheckoutUrl } from '../../core/config/payment-gateway.config';
+import { Contact } from '../../core/models/merchant.models';
 import { MerchantDataService } from '../../core/services/merchant-data.service';
 
 @Component({
   selector: 'app-load-money-page',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './load-money-page.component.html',
   styleUrl: './load-money-page.component.scss'
 })
@@ -15,79 +16,68 @@ export class LoadMoneyPageComponent {
   private readonly fb = inject(FormBuilder);
   readonly data = inject(MerchantDataService);
 
-  readonly flow = signal<'collection' | 'self-topup'>('collection');
+  readonly phoneLookupResult = signal<Contact | null>(null);
+  readonly lookupMessage = signal('');
   readonly resultMessage = signal('');
   readonly resultError = signal(false);
+  readonly gatewayOptions = ['Cashfree'];
 
   readonly form = this.fb.nonNullable.group({
-    customerName: ['Walk-in Customer', Validators.required],
-    amount: [5000, [Validators.required, Validators.min(1)]],
-    cardBrand: ['Visa', Validators.required],
-    maskedCardNumber: ['411111XXXXXX1111', Validators.required],
-    providerTokenReference: ['tok_demo_001', Validators.required],
-    description: ['Merchant wallet load', Validators.required]
+    phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+    gateway: ['', Validators.required],
+    amount: ['', [Validators.required, Validators.min(1)]]
   });
 
-  readonly recentTransactions = computed(() =>
-    this.data
-      .transactions()
-      .filter((item) => item.transactionType === 'CardCollection' || item.transactionType === 'SelfTopup')
-      .slice(0, 8)
-  );
-
-  constructor() {
-    void Promise.all([this.data.loadWalletSummary(), this.data.loadTransactions(), this.data.loadLedger()]).catch(
-      () => undefined
-    );
-  }
-
-  setFlow(flow: 'collection' | 'self-topup'): void {
-    this.flow.set(flow);
+  async searchContact(): Promise<void> {
+    const phoneControl = this.form.controls.phoneNumber;
     this.resultMessage.set('');
     this.resultError.set(false);
-    this.form.patchValue({
-      description: flow === 'collection' ? 'Customer card collection' : 'Merchant self topup'
-    });
-  }
 
-  async submit(): Promise<void> {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (phoneControl.invalid) {
+      phoneControl.markAsTouched();
+      this.phoneLookupResult.set(null);
+      this.lookupMessage.set('Enter a valid 10 digit phone number to search contacts.');
       return;
     }
 
-    this.resultMessage.set('');
-    this.resultError.set(false);
+    const contact = await this.data.lookupContactByPhone(phoneControl.value);
 
-    const value = this.form.getRawValue();
+    if (!contact) {
+      this.phoneLookupResult.set(null);
+      this.lookupMessage.set('No saved contact found for this phone number.');
+      return;
+    }
 
-    try {
-      const transaction =
-        this.flow() === 'collection'
-          ? await this.data.initiateCollection({
-              amount: Number(value.amount),
-              currency: 'INR',
-              customerName: value.customerName,
-              cardBrand: value.cardBrand,
-              maskedCardNumber: value.maskedCardNumber,
-              providerTokenReference: value.providerTokenReference,
-              description: value.description
-            })
-          : await this.data.initiateSelfTopup({
-              amount: Number(value.amount),
-              currency: 'INR',
-              cardBrand: value.cardBrand,
-              maskedCardNumber: value.maskedCardNumber,
-              providerTokenReference: value.providerTokenReference,
-              description: value.description
-            });
+    this.phoneLookupResult.set(contact);
+    this.lookupMessage.set(`Contact verified for ${contact.name}.`);
+  }
 
-      this.resultMessage.set(
-        `${transaction.transactionType} created with reference ${transaction.externalReference}. Status: ${transaction.status}.`
-      );
-    } catch {
+  openGateway(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       this.resultError.set(true);
-      this.resultMessage.set('Unable to initiate load-money flow. Make sure the backend API is running.');
+      this.resultMessage.set('Enter a valid phone number, select Cashfree, and add an amount.');
+      return;
+    }
+
+    if (!this.phoneLookupResult()) {
+      this.resultError.set(true);
+      this.resultMessage.set('Search and verify an existing contact before continuing.');
+      return;
+    }
+
+    if (cashfreeHostedCheckoutUrl.includes('replace-with-your-cashfree-link')) {
+      this.resultError.set(true);
+      this.resultMessage.set('Set your Cashfree hosted checkout URL in payment-gateway.config.ts before continuing.');
+      return;
+    }
+
+    this.resultError.set(false);
+    this.resultMessage.set('Opening Cashfree checkout...');
+    const paymentWindow = window.open(cashfreeHostedCheckoutUrl, '_blank', 'noopener');
+
+    if (!paymentWindow) {
+      window.location.href = cashfreeHostedCheckoutUrl;
     }
   }
 }

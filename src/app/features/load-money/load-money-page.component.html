@@ -1,137 +1,62 @@
 <div class="page-stack">
   <div class="page-title-group">
-    <h1>Load Money</h1>
-    <p>Use customer card collection or merchant self-topup to create wallet funding transactions against the live backend.</p>
+    <h1>Create Payment Link</h1>
+    <p>Verify an existing contact, choose the payment gateway, and continue to hosted checkout.</p>
   </div>
 
-  <section class="panel feature-panel">
-    <div class="panel-header">
-      <h2 class="section-heading">Wallet Snapshot</h2>
-      <div class="pill-row">
-        <div class="pill">Available: {{ data.walletAmountLabel() }}</div>
-        <div class="pill">Held: {{ data.heldAmountLabel() }}</div>
-      </div>
-    </div>
+  <section class="panel load-money-card">
+    <div class="load-money-card__header">Create Payment Link</div>
 
-    <div class="load-money__flow-switch">
-      <button
-        class="ghost-button"
-        type="button"
-        [class.load-money__flow-button--active]="flow() === 'collection'"
-        (click)="setFlow('collection')"
-      >
-        Customer Card Collection
-      </button>
-      <button
-        class="ghost-button"
-        type="button"
-        [class.load-money__flow-button--active]="flow() === 'self-topup'"
-        (click)="setFlow('self-topup')"
-      >
-        Merchant Self Topup
-      </button>
-    </div>
-
-    <form class="page-stack" [formGroup]="form">
-      <div class="filter-grid two-columns">
-        @if (flow() === 'collection') {
-          <div class="field">
-            <label for="load-money-customer-name">Customer Name</label>
-            <input id="load-money-customer-name" type="text" formControlName="customerName" placeholder="Enter customer name" />
-          </div>
+    <form class="load-money-card__body" [formGroup]="form">
+      <div class="field">
+        <label for="load-money-phone">Phone Number:</label>
+        <div class="load-money-card__search-row">
+          <input id="load-money-phone" type="text" formControlName="phoneNumber" placeholder="Enter phone number" />
+          <button class="primary-button load-money-card__search-button" type="button" (click)="searchContact()">Search</button>
+        </div>
+        @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
+          <p class="error-text">Enter a valid 10 digit phone number.</p>
         }
+      </div>
 
-        <div class="field">
-          <label for="load-money-amount">Amount</label>
-          <input id="load-money-amount" type="number" formControlName="amount" placeholder="Enter amount" />
-        </div>
+      @if (lookupMessage()) {
+        <p [class.error-text]="!phoneLookupResult()" [class.success-text]="!!phoneLookupResult()">{{ lookupMessage() }}</p>
+      }
 
-        <div class="field">
-          <label for="load-money-card-brand">Card Brand</label>
-          <select id="load-money-card-brand" formControlName="cardBrand">
-            <option value="Visa">Visa</option>
-            <option value="Mastercard">Mastercard</option>
-            <option value="RuPay">RuPay</option>
-            <option value="Amex">Amex</option>
-          </select>
+      @if (phoneLookupResult(); as contact) {
+        <div class="load-money-card__contact-box">
+          <p><strong>Name:</strong> {{ contact.name }}</p>
+          <p><strong>Email:</strong> {{ contact.email }}</p>
+          <p><strong>Phone:</strong> {{ contact.phone }}</p>
         </div>
+      }
 
-        <div class="field">
-          <label for="load-money-card-number">Masked Card Number</label>
-          <input
-            id="load-money-card-number"
-            type="text"
-            formControlName="maskedCardNumber"
-            placeholder="411111XXXXXX1111"
-          />
-        </div>
+      <div class="field">
+        <label for="load-money-gateway">Payment Gateway:</label>
+        <select id="load-money-gateway" formControlName="gateway">
+          <option value="" disabled>-- Select Gateway --</option>
+          @for (gateway of gatewayOptions; track gateway) {
+            <option [value]="gateway">{{ gateway }}</option>
+          }
+        </select>
+        @if (form.controls.gateway.invalid && form.controls.gateway.touched) {
+          <p class="error-text">Select a payment gateway.</p>
+        }
+      </div>
 
-        <div class="field">
-          <label for="load-money-provider-ref">Provider Token Reference</label>
-          <input
-            id="load-money-provider-ref"
-            type="text"
-            formControlName="providerTokenReference"
-            placeholder="tok_demo_001"
-          />
-        </div>
-
-        <div class="field">
-          <label for="load-money-description">Description</label>
-          <input id="load-money-description" type="text" formControlName="description" placeholder="Description" />
-        </div>
+      <div class="field">
+        <label for="load-money-amount">Amount (INR):</label>
+        <input id="load-money-amount" type="number" formControlName="amount" placeholder="Enter amount" />
+        @if (form.controls.amount.invalid && form.controls.amount.touched) {
+          <p class="error-text">Enter an amount greater than 0.</p>
+        }
       </div>
 
       @if (resultMessage()) {
         <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
       }
 
-      <div class="form-actions">
-        <button class="primary-button" type="button" (click)="submit()">
-          {{ flow() === 'collection' ? 'Initiate Collection' : 'Initiate Self Topup' }}
-        </button>
-      </div>
+      <button class="load-money-card__submit" type="button" (click)="openGateway()">Pay Now</button>
     </form>
-  </section>
-
-  <section class="panel table-panel">
-    <div class="panel-header">
-      <h2 class="section-heading">Recent Load-Money Transactions</h2>
-      <div class="pill">{{ recentTransactions().length }} items</div>
-    </div>
-
-    @if (recentTransactions().length) {
-      <div class="table-scroll">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Fee</th>
-              <th>Reference</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (transaction of recentTransactions(); track transaction.id) {
-              <tr>
-                <td>{{ transaction.transactionType }}</td>
-                <td>{{ transaction.status }}</td>
-                <td>{{ data.formatCurrency(transaction.amount, transaction.currency) }}</td>
-                <td>{{ data.formatCurrency(transaction.feeAmount, transaction.currency) }}</td>
-                <td>{{ transaction.externalReference }}</td>
-                <td>{{ transaction.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    } @else {
-      <div class="empty-state">
-        <h3>No load-money transactions yet</h3>
-        <p>Submit a customer collection or a self-topup to see records here.</p>
-      </div>
-    }
   </section>
 </div>
