@@ -1,0 +1,39 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>Update MPIN</h1>
+    <p>Change the 6-digit MPIN used to unlock the Pari workspace.</p>
+  </div>
+
+  <section class="panel update-mpin-panel">
+    <div class="update-mpin-panel__header">Update MPIN</div>
+
+    <form class="update-mpin-panel__body" [formGroup]="form">
+      <div class="field">
+        <label for="old-mpin">Old MPIN</label>
+        <input id="old-mpin" type="password" formControlName="oldMpin" placeholder="Enter current MPIN" maxlength="6" />
+      </div>
+
+      <div class="field">
+        <label for="new-mpin">New MPIN</label>
+        <input id="new-mpin" type="password" formControlName="newMpin" placeholder="Enter new MPIN" maxlength="6" />
+      </div>
+
+      <div class="field">
+        <label for="confirm-mpin">Confirm MPIN</label>
+        <input
+          id="confirm-mpin"
+          type="password"
+          formControlName="confirmMpin"
+          placeholder="Confirm new MPIN"
+          maxlength="6"
+        />
+      </div>
+
+      @if (message()) {
+        <p [class.error-text]="isError()" [class.success-text]="!isError()">{{ message() }}</p>
+      }
+
+      <button class="primary-button update-mpin-panel__submit" type="button" (click)="submit()">Update MPIN</button>
+    </form>
+  </section>
+</div>

@@ -31,13 +31,22 @@
               <div class="header__avatar header__avatar--large">{{ auth.avatarInitials() }}</div>
               <div>
                 <strong>{{ auth.profileName() }}</strong>
-                <span>{{ auth.profileRole() }}</span>
+                <span>{{ auth.profileEmail() }}</span>
+                <span>{{ auth.profilePhone() }}</span>
               </div>
             </div>
 
-            <button class="header__profile-action" type="button">
+            <button class="header__profile-action" type="button" (click)="goToProfile()">
               <app-icon name="user" [size]="16"></app-icon>
               <span>My Profile</span>
+            </button>
+            <button class="header__profile-action" type="button" (click)="goToUpdateMpin()">
+              <app-icon name="shield" [size]="16"></app-icon>
+              <span>MPIN</span>
+            </button>
+            <button class="header__profile-action" type="button" (click)="lockScreen()">
+              <app-icon name="lock" [size]="16"></app-icon>
+              <span>Lock Screen</span>
             </button>
             <button class="header__profile-action" type="button" (click)="logout()">
               <app-icon name="logout" [size]="16"></app-icon>

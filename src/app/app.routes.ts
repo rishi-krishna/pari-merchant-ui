@@ -124,6 +124,26 @@ export const routes: Routes = [
           import('./features/reports/reports-page.component').then((m) => m.ReportsPageComponent)
       },
       {
+        path: 'profile',
+        title: 'My Profile',
+        data: {
+          label: 'My Profile',
+          breadcrumbs: ['Dashboard', 'My Profile']
+        },
+        loadComponent: () =>
+          import('./features/profile/profile-page.component').then((m) => m.ProfilePageComponent)
+      },
+      {
+        path: 'update-mpin',
+        title: 'Update MPIN',
+        data: {
+          label: 'Update MPIN',
+          breadcrumbs: ['Dashboard', 'Update MPIN']
+        },
+        loadComponent: () =>
+          import('./features/profile/update-mpin-page.component').then((m) => m.UpdateMpinPageComponent)
+      },
+      {
         path: 'load-money',
         pathMatch: 'full',
         redirectTo: 'bank-accounts/load-money'

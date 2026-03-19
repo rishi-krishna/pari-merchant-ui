@@ -142,6 +142,6 @@ export interface UserProfile {
   merchantCode: string;
   role: string;
   displayName: string;
-  maskedPhone: string;
-  maskedEmail: string;
+  phone: string;
+  email: string;
 }

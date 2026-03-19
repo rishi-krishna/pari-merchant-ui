@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { computed } from '@angular/core';
 
 import { AuthFlowService } from '../../core/services/auth-flow.service';
 import { AppIconComponent } from '../../shared/app-icon.component';
@@ -18,6 +19,12 @@ export class MpinPageComponent {
   readonly auth = inject(AuthFlowService);
 
   readonly errorMessage = signal('');
+  readonly title = computed(() => (this.auth.isLocked() ? 'UNLOCK WORKSPACE' : 'ENTER MPIN'));
+  readonly subtitle = computed(() =>
+    this.auth.isLocked()
+      ? 'Enter your 6-digit MPIN to unlock the Pari workspace.'
+      : 'Please enter your 6-digit MPIN to access dashboard'
+  );
   readonly form = this.fb.nonNullable.group({
     mpin: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
   });
@@ -32,7 +39,7 @@ export class MpinPageComponent {
     const verified = await this.auth.verifyMpin(this.form.controls.mpin.value);
 
     if (!verified) {
-      this.errorMessage.set('MPIN verification failed. Use the configured development merchant MPIN.');
+      this.errorMessage.set('MPIN verification failed. Check the entered MPIN and try again.');
       return;
     }
 

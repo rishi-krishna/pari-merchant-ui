@@ -11,6 +11,13 @@
     var(--bg);
 }
 
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: block;
+}
+
 .portal-shell__body {
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);

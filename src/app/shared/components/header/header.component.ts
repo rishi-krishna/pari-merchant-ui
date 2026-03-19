@@ -33,8 +33,25 @@ export class HeaderComponent {
     this.profileOpen.update((value) => !value);
   }
 
+  goToProfile(): void {
+    this.profileOpen.set(false);
+    void this.router.navigateByUrl('/dashboard/profile');
+  }
+
+  goToUpdateMpin(): void {
+    this.profileOpen.set(false);
+    void this.router.navigateByUrl('/dashboard/update-mpin');
+  }
+
+  lockScreen(): void {
+    this.profileOpen.set(false);
+    this.auth.lockScreen();
+    void this.router.navigateByUrl('/mpin');
+  }
+
   logout(): void {
+    this.profileOpen.set(false);
     this.auth.logout();
-    this.router.navigateByUrl('/login');
+    void this.router.navigateByUrl('/login');
   }
 }

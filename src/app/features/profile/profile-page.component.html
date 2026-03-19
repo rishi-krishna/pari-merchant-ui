@@ -1,0 +1,91 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>My Profile</h1>
+    <p>Update the single-user workspace profile details saved for Pari.</p>
+  </div>
+
+  <section class="panel profile-panel">
+    <aside class="profile-panel__nav">
+      <button
+        class="profile-panel__nav-item"
+        type="button"
+        [class.is-active]="activeTab() === 'general'"
+        (click)="showTab('general')"
+      >
+        General Information
+      </button>
+      <button
+        class="profile-panel__nav-item"
+        type="button"
+        [class.is-active]="activeTab() === 'contact'"
+        (click)="showTab('contact')"
+      >
+        Contact
+      </button>
+
+      <button class="profile-panel__save-nav" type="button" (click)="saveProfile()" [disabled]="saving()">
+        {{ saving() ? 'Saving...' : 'Save' }}
+      </button>
+    </aside>
+
+    <div class="profile-panel__content">
+      @if (activeTab() === 'general') {
+        <div class="profile-panel__hero">
+          <div class="profile-panel__avatar-wrap">
+            <div class="profile-panel__avatar">{{ auth.avatarInitials() }}</div>
+            <p>Profile Photo</p>
+          </div>
+
+          <div class="profile-panel__form-grid">
+            <label class="profile-field">
+              <span>Full Name</span>
+              <input
+                type="text"
+                [(ngModel)]="displayName"
+                name="displayName"
+                placeholder="Enter full name"
+              />
+            </label>
+
+            <label class="profile-field">
+              <span>Merchant ID</span>
+              <input type="text" [value]="auth.userId()" readonly />
+            </label>
+          </div>
+        </div>
+      }
+
+      @if (activeTab() === 'contact') {
+        <div class="profile-panel__form-grid profile-panel__form-grid--contact">
+          <label class="profile-field">
+            <span>Email</span>
+            <input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="Enter email address"
+            />
+          </label>
+
+          <label class="profile-field">
+            <span>Phone Number</span>
+            <input
+              type="tel"
+              [(ngModel)]="phone"
+              name="phone"
+              placeholder="Enter 10 digit phone number"
+            />
+          </label>
+        </div>
+      }
+
+      @if (saveMessage()) {
+        <p class="profile-panel__message profile-panel__message--success">{{ saveMessage() }}</p>
+      }
+
+      @if (saveError()) {
+        <p class="profile-panel__message profile-panel__message--error">{{ saveError() }}</p>
+      }
+    </div>
+  </section>
+</div>

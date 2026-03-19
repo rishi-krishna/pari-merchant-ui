@@ -10,12 +10,12 @@
     <div class="mpin-card__header">
       <h1>
         <app-icon name="lock" [size]="28"></app-icon>
-        <span>ENTER MPIN</span>
+        <span>{{ title() }}</span>
       </h1>
-      <p>Please enter your 6-digit MPIN to access dashboard</p>
+      <p>{{ subtitle() }}</p>
     </div>
 
-    <div class="mpin-card__avatar">BK</div>
+    <div class="mpin-card__avatar">{{ auth.avatarInitials() }}</div>
 
     <form class="mpin-card__form" [formGroup]="form" (ngSubmit)="submit()">
       <div class="auth-field">
