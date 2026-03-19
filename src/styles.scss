@@ -1,23 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg: #f7f9fe;
+  --bg: #f6f7fb;
   --surface: #ffffff;
-  --surface-soft: #fafcff;
-  --line: #d9e3f3;
-  --line-strong: #c7d3e8;
-  --text: #263a67;
-  --muted: #8393b8;
-  --muted-strong: #677392;
-  --primary: #2f6ad9;
-  --primary-strong: #245bc3;
-  --sidebar-start: #1d4ed8;
-  --sidebar-end: #173c85;
-  --gold: #f1b44c;
-  --success: #85c341;
+  --surface-soft: #fbfbfe;
+  --line: #d8e0eb;
+  --line-strong: #c4cfdd;
+  --text: #1e2940;
+  --muted: #71809a;
+  --muted-strong: #49566f;
+  --primary: #1c5d99;
+  --primary-strong: #123d6f;
+  --accent: #f08a5d;
+  --sidebar-start: #192335;
+  --sidebar-end: #0e1727;
+  --gold: #f0b24c;
+  --success: #2ca36b;
   --danger: #f25c68;
-  --shadow-soft: 0 12px 28px rgba(34, 67, 129, 0.08);
-  --shadow-strong: 0 22px 48px rgba(24, 44, 95, 0.14);
+  --shadow-soft: 0 14px 32px rgba(17, 43, 68, 0.08);
+  --shadow-strong: 0 24px 52px rgba(8, 22, 34, 0.16);
 }
 
 * {
@@ -34,6 +35,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Poppins', 'Segoe UI', sans-serif;
+  overflow-x: hidden;
 }
 
 button,
@@ -84,7 +86,7 @@ a {
 .panel {
   border: 1px solid rgba(199, 211, 232, 0.7);
   border-radius: 30px;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff, #fcfdff);
   box-shadow: var(--shadow-soft);
 }
 
@@ -99,7 +101,7 @@ a {
 .panel-title,
 .section-heading {
   margin: 0;
-  color: #285bbd;
+  color: var(--primary);
 }
 
 .panel-title {
@@ -111,6 +113,10 @@ a {
 .table-panel,
 .feature-panel {
   padding: 24px;
+}
+
+.container-fluid {
+  --bs-gutter-x: 1.5rem;
 }
 
 .filter-grid {
@@ -254,7 +260,7 @@ a {
   padding: 0 14px;
   border-radius: 999px;
   color: var(--primary);
-  background: #eef4ff;
+  background: rgba(15, 107, 143, 0.08);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -547,6 +553,10 @@ a {
   .panel-header {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .page-stack {
+    gap: 20px;
   }
 
   .filter-panel,

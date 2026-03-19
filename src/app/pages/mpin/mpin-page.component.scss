@@ -5,7 +5,7 @@
   place-items: center;
   padding: 24px;
   overflow: hidden;
-  background: linear-gradient(180deg, #1d3557 0%, #17304f 100%);
+  background: linear-gradient(180deg, #102a43 0%, #091521 100%);
 }
 
 .mpin-shell__backdrop {
@@ -13,7 +13,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  color: rgba(242, 199, 97, 0.95);
+  color: rgba(223, 247, 240, 0.95);
 }
 
 .mpin-shell__eyebrow {
@@ -30,7 +30,7 @@
   width: min(520px, 72vw);
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 12px solid rgba(242, 199, 97, 0.95);
+  border: 12px solid rgba(26, 163, 122, 0.95);
 }
 
 .mpin-shell__emblem::before,
@@ -41,7 +41,7 @@
   width: 46%;
   height: 14px;
   border-radius: 999px;
-  background: rgba(242, 199, 97, 0.95);
+  background: rgba(26, 163, 122, 0.95);
 }
 
 .mpin-shell__emblem::before {
@@ -58,8 +58,8 @@
   width: 54%;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 8px solid rgba(242, 199, 97, 0.95);
-  background: #33291c;
+  border: 8px solid rgba(26, 163, 122, 0.95);
+  background: #173247;
   font-size: clamp(2.2rem, 4vw, 3.8rem);
   font-weight: 700;
 }

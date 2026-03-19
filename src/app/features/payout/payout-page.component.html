@@ -1,7 +1,7 @@
 <div class="page-stack">
   <div class="page-title-group">
     <h1>Payout</h1>
-    <p>Send funds only to saved validated beneficiaries. The backend will place a hold and create a payout transaction.</p>
+    <p>Verify a saved contact, choose one of that contact's saved beneficiary accounts, and then send money to that bank account.</p>
   </div>
 
   <section class="panel feature-panel">
@@ -13,12 +13,23 @@
     <form class="page-stack" [formGroup]="form">
       <div class="filter-grid two-columns">
         <div class="field">
-          <label for="payout-beneficiary">Beneficiary</label>
+          <label for="payout-phone">Contact Phone</label>
+          <div class="payout-page__search-row">
+            <input id="payout-phone" type="text" formControlName="phoneNumber" placeholder="Enter saved contact phone" />
+            <button class="primary-button payout-page__search-button" type="button" (click)="searchContact()">Verify</button>
+          </div>
+          @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
+            <p class="error-text">Enter a valid 10 digit phone number.</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="payout-beneficiary">Beneficiary Account</label>
           <select id="payout-beneficiary" formControlName="beneficiaryId">
             <option value="">Select beneficiary</option>
             @for (beneficiary of beneficiaries(); track beneficiary.id) {
               <option [value]="beneficiary.id">
-                {{ beneficiary.contactName }} | {{ beneficiary.bankName }} | {{ beneficiary.accountNumber }}
+                {{ beneficiary.bankName }} | {{ beneficiary.accountNumber }} | {{ beneficiary.ifsc }}
               </option>
             }
           </select>
@@ -34,6 +45,18 @@
           <input id="payout-purpose" type="text" formControlName="purpose" placeholder="Settlement purpose" />
         </div>
       </div>
+
+      @if (lookupMessage()) {
+        <p [class.error-text]="!phoneLookupResult()" [class.success-text]="!!phoneLookupResult()">{{ lookupMessage() }}</p>
+      }
+
+      @if (phoneLookupResult(); as contact) {
+        <div class="helper-card">
+          <strong>{{ contact.name }}</strong>
+          <span>{{ contact.phone }} · {{ contact.email }}</span>
+          <span>{{ beneficiaries().length }} saved beneficiary account(s) available for payout.</span>
+        </div>
+      }
 
       @if (resultMessage()) {
         <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
@@ -79,7 +102,7 @@
     } @else {
       <div class="empty-state">
         <h3>No payouts yet</h3>
-        <p>Create a payout to a validated beneficiary to see it here.</p>
+        <p>Verify a contact, pick a beneficiary, and create a payout to see records here.</p>
       </div>
     }
   </section>

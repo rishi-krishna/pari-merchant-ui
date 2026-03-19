@@ -1,0 +1,76 @@
+<div class="page-stack">
+  <div class="page-title-row">
+    <div class="page-title-group">
+      <h1>Reports</h1>
+      <p>Basic transaction visibility for now. This page can evolve into analytics later without changing the main navigation again.</p>
+    </div>
+
+    <div class="pill">Total Volume: {{ data.formatCurrency(totalVolume()) }}</div>
+  </div>
+
+  <section class="panel filter-panel">
+    <h2 class="panel-title">Transaction Filter</h2>
+
+    <form class="filter-grid" [formGroup]="filterForm">
+      <div class="field">
+        <label for="reports-type">Transaction Type</label>
+        <input id="reports-type" type="text" formControlName="type" placeholder="Payout / CardCollection" />
+      </div>
+      <div class="field">
+        <label for="reports-status">Status</label>
+        <input id="reports-status" type="text" formControlName="status" placeholder="Success / Pending" />
+      </div>
+      <div class="field">
+        <label for="reports-reference">Reference</label>
+        <input id="reports-reference" type="text" formControlName="reference" placeholder="Search by reference" />
+      </div>
+    </form>
+
+    <div class="form-actions">
+      <button class="primary-button" type="button" (click)="applyFilters()">Filter</button>
+    </div>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">Basic Transaction Report</h2>
+      <div class="pill">{{ transactions().length }} rows</div>
+    </div>
+
+    @if (transactions().length) {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Net</th>
+              <th>Reference</th>
+              <th>Provider</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of transactions(); track transaction.id) {
+              <tr>
+                <td>{{ transaction.transactionType }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>{{ data.formatCurrency(transaction.amount, transaction.currency) }}</td>
+                <td>{{ data.formatCurrency(transaction.netAmount, transaction.currency) }}</td>
+                <td>{{ transaction.externalReference }}</td>
+                <td>{{ transaction.providerReference || '-' }}</td>
+                <td>{{ transaction.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <h3>No transactions matched</h3>
+        <p>Adjust the filters or create a load-money or payout transaction first.</p>
+      </div>
+    }
+  </section>
+</div>

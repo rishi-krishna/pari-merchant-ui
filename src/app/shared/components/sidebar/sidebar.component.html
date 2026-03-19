@@ -1,5 +1,16 @@
-<aside class="sidebar" [class.mobile]="mobile()" [class.mobile-open]="mobile() && open()">
-  <div class="sidebar__curve-spacer"></div>
+<aside
+  class="sidebar"
+  [class.mobile]="mobile()"
+  [class.mobile-open]="mobile() && open()"
+  [class.sidebar--collapsed]="collapsed()"
+>
+  <div class="sidebar__brand">
+    <div class="sidebar__brand-mark">P</div>
+    <div class="sidebar__brand-copy">
+      <strong>Pari</strong>
+      <span>Payments Workspace</span>
+    </div>
+  </div>
 
   <nav class="sidebar__nav">
     @for (section of sections; track section.heading ?? $index) {
@@ -15,9 +26,10 @@
             routerLinkActive="is-active"
             [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
             (click)="onSelect()"
+            [attr.title]="collapsed() ? item.label : null"
           >
             <app-icon [name]="item.icon" [size]="18"></app-icon>
-            <span>{{ item.label }}</span>
+            <span class="sidebar__item-label">{{ item.label }}</span>
           </a>
         }
       </div>

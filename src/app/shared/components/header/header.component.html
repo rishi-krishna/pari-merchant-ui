@@ -1,8 +1,9 @@
 <header class="header">
   <div class="header__brand">
-    <div class="header__brand-mark">SL</div>
+    <div class="header__brand-mark">P</div>
     <div class="header__brand-copy">
-      <span class="header__brand-text">SLPE</span>
+      <span class="header__brand-text">Pari</span>
+      <span class="header__brand-subtitle">Payments desk</span>
     </div>
   </div>
 
@@ -16,15 +17,6 @@
       <app-icon name="wallet" [size]="18"></app-icon>
       <span>{{ data.walletAmountLabel() }}</span>
     </div>
-
-    <button class="header__plain-icon" type="button" aria-label="Add action">
-      <app-icon name="plus" [size]="18"></app-icon>
-    </button>
-
-    <button class="header__plain-icon" type="button" aria-label="Notifications">
-      <app-icon name="bell" [size]="18"></app-icon>
-      <span class="header__notification-dot"></span>
-    </button>
 
     <div class="header__profile" (click)="$event.stopPropagation()">
       <button class="header__avatar-button" type="button" (click)="toggleProfile($event)">

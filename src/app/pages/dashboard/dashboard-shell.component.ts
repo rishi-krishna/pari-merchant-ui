@@ -18,6 +18,7 @@ export class DashboardShellComponent {
 
   readonly isMobile = signal(typeof window !== 'undefined' ? window.innerWidth < 1100 : false);
   readonly mobileSidebarOpen = signal(false);
+  readonly desktopSidebarCollapsed = signal(false);
 
   private readonly routeMeta = toSignal(
     this.router.events.pipe(
@@ -47,7 +48,10 @@ export class DashboardShellComponent {
   toggleSidebar(): void {
     if (this.isMobile()) {
       this.mobileSidebarOpen.update((value) => !value);
+      return;
     }
+
+    this.desktopSidebarCollapsed.update((value) => !value);
   }
 
   closeSidebar(): void {

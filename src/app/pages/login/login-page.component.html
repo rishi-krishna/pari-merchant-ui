@@ -1,59 +1,58 @@
-<div class="auth-shell">
-  <section class="auth-shell__hero">
-    <div class="auth-shell__hero-content">
-      <span class="auth-shell__eyebrow">Welcome to</span>
-      <h1>SLPE INFOTECH PRIVATE LIMITED</h1>
-      <p>Designed for scale, collections, and merchant operations.</p>
+<div class="login-shell">
+  <div class="login-shell__orb login-shell__orb--one"></div>
+  <div class="login-shell__orb login-shell__orb--two"></div>
 
-      <div class="auth-shell__emblem">
-        <div class="auth-shell__emblem-core">SLPE</div>
+  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="login-card__brand">
+      <div class="login-card__logo">P</div>
+      <div>
+        <strong>Pari</strong>
+        <span>Payments Workspace</span>
       </div>
     </div>
 
-    <div class="auth-shell__links">
-      <span>Links:</span>
-      <button type="button">Privacy Policy</button>
-      <button type="button">Terms & Conditions</button>
-      <button type="button">Refund & Cancellation</button>
+    <div class="login-card__header">
+      <h1>Sign in</h1>
+      <p>Access your workspace securely.</p>
     </div>
-  </section>
 
-  <section class="auth-shell__panel">
-    <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
-      <div class="auth-card__header">
-        <h2>LOGIN</h2>
-        <p>Please Log into your account</p>
-      </div>
-
-      <div class="auth-field">
+    <div class="login-card__field-group">
+      <label for="login-mobile">Mobile Number</label>
+      <div class="login-card__field">
         <app-icon name="phone" [size]="18"></app-icon>
-        <input type="text" formControlName="mobileNumber" placeholder="Phone" />
+        <input id="login-mobile" type="text" formControlName="mobileNumber" placeholder="Enter mobile number" />
       </div>
       @if (form.controls.mobileNumber.invalid && form.controls.mobileNumber.touched) {
-        <p class="error-text auth-error">Enter a valid 10 digit mobile number.</p>
+        <p class="error-text login-card__error">Enter a valid 10 digit mobile number.</p>
       }
+    </div>
 
-      <div class="auth-field">
+    <div class="login-card__field-group">
+      <label for="login-password">Password</label>
+      <div class="login-card__field">
         <app-icon name="lock" [size]="18"></app-icon>
-        <input type="password" formControlName="password" placeholder="Password" />
+        <input id="login-password" type="password" formControlName="password" placeholder="Enter password" />
       </div>
       @if (form.controls.password.invalid && form.controls.password.touched) {
-        <p class="error-text auth-error">Password is required.</p>
+        <p class="error-text login-card__error">Password is required.</p>
       }
-      @if (errorMessage) {
-        <p class="error-text auth-error">{{ errorMessage }}</p>
-      }
+    </div>
 
-      <label class="auth-checkbox">
+    @if (errorMessage) {
+      <p class="error-text login-card__error login-card__error--server">{{ errorMessage }}</p>
+    }
+
+    <div class="login-card__meta">
+      <label class="login-card__checkbox">
         <input type="checkbox" formControlName="rememberMe" />
-        <span>Remember me</span>
+        <span>Keep me signed in</span>
       </label>
 
-      <button class="primary-button auth-submit" type="submit" [disabled]="auth.loading()">
-        {{ auth.loading() ? 'Signing In...' : 'Login' }}
-      </button>
+      <button class="login-card__link" type="button">Forgot password?</button>
+    </div>
 
-      <button class="auth-link" type="button">Forgot your Password ?</button>
-    </form>
-  </section>
+    <button class="login-card__submit" type="submit" [disabled]="auth.loading()">
+      {{ auth.loading() ? 'Signing in...' : 'Continue' }}
+    </button>
+  </form>
 </div>

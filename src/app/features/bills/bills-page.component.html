@@ -1,15 +1,7 @@
 <div class="page-stack">
-  <div class="page-title-row">
-    <div class="page-title-group">
-      <h1>All Bills</h1>
-      <p>Transaction history view matching the Bharat Connect style with searchable bill and reference data.</p>
-    </div>
-
-    <div class="brand-mark">
-      <strong>B</strong>
-      <span>Bharat</span>
-      <span>Connect</span>
-    </div>
+  <div class="page-title-group">
+    <h1>My Bills</h1>
+    <p>This screen now focuses on load-money collections and related incoming transaction references.</p>
   </div>
 
   <section class="panel filter-panel">
@@ -17,28 +9,16 @@
 
     <form class="filter-grid" [formGroup]="filterForm">
       <div class="field">
-        <label for="bill-mobile">Mobile Number</label>
-        <input id="bill-mobile" type="text" formControlName="mobileNumber" placeholder="Mobile Number" />
+        <label for="bills-type">Transaction Type</label>
+        <input id="bills-type" type="text" formControlName="type" placeholder="CardCollection" />
       </div>
       <div class="field">
-        <label for="bill-payment-ref">Payment Ref Id</label>
-        <input id="bill-payment-ref" type="text" formControlName="paymentRefId" placeholder="Enter Payment Ref Id" />
+        <label for="bills-status">Status</label>
+        <input id="bills-status" type="text" formControlName="status" placeholder="Success / Pending" />
       </div>
       <div class="field">
-        <label for="bill-approval-ref">Approval Ref Num</label>
-        <input id="bill-approval-ref" type="text" formControlName="approvalRefNum" placeholder="Enter Approval Ref Num" />
-      </div>
-      <div class="field">
-        <label for="bill-transaction-ref">Transaction Reference ID</label>
-        <input id="bill-transaction-ref" type="text" formControlName="transactionReferenceId" placeholder="Enter Transaction Reference ID" />
-      </div>
-      <div class="field">
-        <label for="bill-status">Status</label>
-        <input id="bill-status" type="text" formControlName="status" placeholder="Enter Status" />
-      </div>
-      <div class="field">
-        <label for="bill-date-range">Select Date</label>
-        <input id="bill-date-range" type="text" formControlName="dateRange" placeholder="Select range of dates" />
+        <label for="bills-reference">Reference</label>
+        <input id="bills-reference" type="text" formControlName="reference" placeholder="Search by external reference" />
       </div>
     </form>
 
@@ -49,37 +29,42 @@
 
   <section class="panel table-panel">
     <div class="panel-header">
-      <h2 class="section-heading">All Bills</h2>
+      <h2 class="section-heading">Load Money Transactions</h2>
       <div class="pill">{{ bills().length }} entries</div>
     </div>
 
-    <div class="table-scroll">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>TXN Reference ID</th>
-            <th>Biller Name</th>
-            <th>Biller Category</th>
-            <th>Amount</th>
-            <th>Reference ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (bill of bills(); track bill.id) {
+    @if (bills().length) {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
             <tr>
-              <td>{{ bill.id }}</td>
-              <td>{{ bill.date }}</td>
-              <td><span class="inline-link">{{ bill.paymentRefId }}</span></td>
-              <td>{{ bill.billerName }}</td>
-              <td>{{ bill.billerCategory }}</td>
-              <td>{{ bill.amount }}</td>
-              <td>{{ bill.referenceId }}</td>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Fee</th>
+              <th>Reference</th>
+              <th>Created</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            @for (bill of bills(); track bill.id) {
+              <tr>
+                <td>{{ bill.transactionType }}</td>
+                <td>{{ bill.status }}</td>
+                <td>{{ data.formatCurrency(bill.amount, bill.currency) }}</td>
+                <td>{{ data.formatCurrency(bill.feeAmount, bill.currency) }}</td>
+                <td>{{ bill.externalReference }}</td>
+                <td>{{ bill.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <h3>No load-money transactions yet</h3>
+        <p>Once you start collecting payments, the transaction details will appear here.</p>
+      </div>
+    }
   </section>
 </div>

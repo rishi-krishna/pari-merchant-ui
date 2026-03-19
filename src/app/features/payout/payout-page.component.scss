@@ -1,3 +1,30 @@
 :host {
   display: block;
 }
+
+.payout-page__search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px;
+}
+
+.payout-page__search-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.payout-page__search-row input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+@media (max-width: 640px) {
+  .payout-page__search-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .payout-page__search-button,
+  .payout-page__search-row input {
+    border-radius: 14px;
+  }
+}

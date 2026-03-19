@@ -73,12 +73,12 @@ export class ContactsPageComponent {
 
   openEditContact(contact: Contact): void {
     this.editingContactId.set(contact.id);
-    this.formMessage.set('For security, masked phone and email cannot be prefilled. Enter them again to save updates.');
+    this.formMessage.set('');
     this.formMessageIsError.set(false);
     this.contactForm.reset({
       name: contact.name,
-      email: '',
-      phone: '',
+      email: contact.email,
+      phone: contact.phone,
       city: contact.city,
       status: contact.status
     });

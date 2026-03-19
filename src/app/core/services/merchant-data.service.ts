@@ -21,8 +21,10 @@ import {
 interface ContactResponse {
   id: string;
   name: string;
-  maskedEmail: string;
-  maskedPhone: string;
+  email?: string;
+  phone?: string;
+  maskedEmail?: string;
+  maskedPhone?: string;
   city: string;
   status: string;
 }
@@ -31,9 +33,11 @@ interface BeneficiaryResponse {
   id: string;
   contactId: string;
   contactName: string;
-  maskedPhone: string;
+  phone?: string;
+  maskedPhone?: string;
   accountHolderName: string;
-  maskedAccountNumber: string;
+  accountNumber?: string;
+  maskedAccountNumber?: string;
   bankName: string;
   ifsc: string;
   branch: string;
@@ -94,38 +98,38 @@ const INR_FORMATTER = new Intl.NumberFormat('en-IN', {
 const SCHEMES: Scheme[] = [
   {
     id: 1,
-    name: 'Slpe Gold Travel Prime',
+    name: 'Pari Gateway Starter',
     transactionLimit: formatCurrencyText(40000),
     commissions: [
-      { cardType: 'Consumer', commission: '1.42%' },
-      { cardType: 'Business', commission: '1.87%' }
+      { cardType: 'UPI', commission: '1.10%' },
+      { cardType: 'Card', commission: '1.85%' }
     ]
   },
   {
     id: 2,
-    name: 'Slpe Silver Edu Lite',
+    name: 'Pari Gateway Standard',
     transactionLimit: formatCurrencyText(40000),
     commissions: [
-      { cardType: 'Consumer', commission: '1.32%' },
-      { cardType: 'Business', commission: '1.87%' }
+      { cardType: 'UPI', commission: '0.95%' },
+      { cardType: 'Card', commission: '1.75%' }
     ]
   },
   {
     id: 3,
-    name: 'Slpe Gold Travel Pure',
+    name: 'Pari Gateway Growth',
     transactionLimit: formatCurrencyText(50000),
     commissions: [
-      { cardType: 'Consumer', commission: '1.37%' },
-      { cardType: 'Business', commission: '1.82%' }
+      { cardType: 'UPI', commission: '0.90%' },
+      { cardType: 'Card', commission: '1.68%' }
     ]
   },
   {
     id: 4,
-    name: 'Slpe Marine Pay',
+    name: 'Pari Gateway Priority',
     transactionLimit: formatCurrencyText(50000),
     commissions: [
-      { cardType: 'Business', commission: '1.82%' },
-      { cardType: 'Consumer', commission: '1.37%' }
+      { cardType: 'UPI', commission: '0.82%' },
+      { cardType: 'Card', commission: '1.62%' }
     ]
   }
 ];
@@ -133,42 +137,42 @@ const SCHEMES: Scheme[] = [
 const COMMISSION_METHODS: CommissionMethod[] = [
   {
     id: 1,
-    gateway: 'Slpe insure lite',
+    gateway: 'Pari starter',
     from: formatCurrencyText(100),
     to: formatCurrencyText(200000),
-    partner: 'payu',
-    cardType: 'CC',
-    cardIssuer: 'others',
+    partner: 'demo_partner_a',
+    cardType: 'Credit Card',
+    cardIssuer: 'sample issuer',
     totalCommission: '1.58%'
   },
   {
     id: 2,
-    gateway: 'Slpe insure prime',
+    gateway: 'Pari standard',
     from: formatCurrencyText(100),
     to: formatCurrencyText(100000),
-    partner: 'slpe_insure_prime',
+    partner: 'demo_partner_b',
     cardType: 'Corporate Card',
-    cardIssuer: 'others',
+    cardIssuer: 'sample issuer',
     totalCommission: '1.79%'
   },
   {
     id: 3,
-    gateway: 'Slpe insure prime',
+    gateway: 'Pari standard',
     from: formatCurrencyText(100),
     to: formatCurrencyText(100000),
-    partner: 'slpe_insure_prime',
+    partner: 'demo_partner_b',
     cardType: 'Premium Card',
-    cardIssuer: 'others',
+    cardIssuer: 'sample issuer',
     totalCommission: '1.69%'
   },
   {
     id: 4,
-    gateway: 'Slpe insure prime',
+    gateway: 'Pari standard',
     from: formatCurrencyText(100),
     to: formatCurrencyText(100000),
-    partner: 'slpe_insure_prime',
+    partner: 'demo_partner_b',
     cardType: 'Retail Card',
-    cardIssuer: 'others',
+    cardIssuer: 'sample issuer',
     totalCommission: '1.69%'
   }
 ];
@@ -204,21 +208,21 @@ const BILL_HISTORY: BillHistory[] = [
 
 const FALLBACK_KYC: KycInfo = {
   status: 'Approved',
-  name: 'Demo Merchant',
+  name: 'Pari Operator',
   pan: '******234F',
   dateOfBirth: '01/01/1990',
   aadhaarNumber: '********0000',
-  accountHolderName: 'Demo Merchant',
-  bankName: 'Demo Bank',
+  accountHolderName: 'Pari Operator',
+  bankName: 'Sample Bank',
   accountNumber: '*******1234',
   ifsc: 'DEMO0001234',
   branch: 'Main Branch',
-  companyName: 'Demo Merchant Private Limited',
+  companyName: 'Pari Payments Private Limited',
   companyType: 'Private Limited',
   companyGst: '',
-  companyAddress: '100 Market Street',
-  companyCity: 'Sample City',
-  companyState: 'Sample State',
+  companyAddress: '100 Sample Street',
+  companyCity: 'Demo City',
+  companyState: 'Demo State',
   companyPincode: '500001',
   companyCountry: 'India',
   merchantPhotoLabel: 'Merchant Photo',
@@ -229,9 +233,9 @@ const FALLBACK_KYC: KycInfo = {
 const ANNOUNCEMENT: Announcement = {
   title: 'Announcement',
   message:
-    'New payout and payment-link limits are now active for Gold Travel and Insure Prime programs. Review the updated commission cards before sharing links with customers.',
-  bannerTitle: 'Merchant Growth Update',
-  bannerSubtitle: 'Faster collections, smoother settlement, and fresh campaign support.'
+    'Pari sample announcement placeholder.',
+  bannerTitle: 'Pari Update',
+  bannerSubtitle: 'Static sample content for UI preview only.'
 };
 
 @Injectable({ providedIn: 'root' })
@@ -267,7 +271,7 @@ export class MerchantDataService {
   readonly commissionMethods = COMMISSION_METHODS;
   readonly billHistory = BILL_HISTORY;
   readonly announcement = ANNOUNCEMENT;
-  readonly paymentLink = 'https://merchant.slpe.in/process-payment/C9bsNPvcpBdKwb3E21V6MR4ZjcjFmbxe';
+  readonly paymentLink = 'https://demo.pari.test/payments/sample-link';
   readonly paymentGatewayOptions = SCHEMES.map((scheme) => scheme.name);
 
   async loadContacts(): Promise<void> {
@@ -485,8 +489,8 @@ export class MerchantDataService {
     return {
       id: response.id,
       name: response.name,
-      email: response.maskedEmail,
-      phone: response.maskedPhone,
+      email: response.email ?? response.maskedEmail ?? '',
+      phone: response.phone ?? response.maskedPhone ?? '',
       city: response.city,
       status: this.parseContactStatus(response.status)
     };
@@ -497,9 +501,9 @@ export class MerchantDataService {
       id: response.id,
       contactId: response.contactId,
       contactName: response.contactName,
-      phone: response.maskedPhone,
+      phone: response.phone ?? response.maskedPhone ?? '',
       accountHolderName: response.accountHolderName,
-      accountNumber: response.maskedAccountNumber,
+      accountNumber: response.accountNumber ?? response.maskedAccountNumber ?? '',
       bankName: response.bankName,
       ifsc: response.ifsc,
       branch: response.branch,

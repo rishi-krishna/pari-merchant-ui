@@ -37,7 +37,7 @@ export class LoginPageComponent {
       await this.auth.submitLogin(this.form.controls.mobileNumber.value, this.form.controls.password.value);
       await this.router.navigateByUrl('/mpin');
     } catch {
-      this.errorMessage = 'Login failed. Use the configured development merchant credentials.';
+      this.errorMessage = 'Login failed. Check the mobile number and password, then try again.';
     }
   }
 }

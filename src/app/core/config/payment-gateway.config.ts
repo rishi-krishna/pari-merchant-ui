@@ -1,2 +1,2 @@
-export const cashfreeHostedCheckoutUrl = 'https://payments.cashfree.com/forms/replace-with-your-cashfree-link';
+export const cashfreeHostedCheckoutUrl = 'https://payments-test.cashfree.com/forms/ccloadmoney';
 

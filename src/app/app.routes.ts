@@ -28,9 +28,61 @@ export const routes: Routes = [
       {
         path: '',
         title: 'Dashboard',
-        data: { label: 'Dashboard' },
+        data: { label: 'Overview' },
         loadComponent: () =>
           import('./pages/dashboard/dashboard-home.component').then((m) => m.DashboardHomeComponent)
+      },
+      {
+        path: 'contacts',
+        title: 'Contacts',
+        data: {
+          label: 'Contacts',
+          breadcrumbs: ['Dashboard', 'Contacts']
+        },
+        loadComponent: () =>
+          import('./features/contacts/contacts-page.component').then((m) => m.ContactsPageComponent)
+      },
+      {
+        path: 'bank-accounts',
+        title: 'Bank Accounts',
+        data: {
+          label: 'Bank Accounts',
+          breadcrumbs: ['Dashboard', 'Bank Accounts']
+        },
+        loadComponent: () =>
+          import('./features/bank-accounts/bank-accounts-page.component').then((m) => m.BankAccountsPageComponent)
+      },
+      {
+        path: 'bank-accounts/create-beneficiary',
+        title: 'Create Beneficiary',
+        data: {
+          label: 'Create Beneficiary',
+          breadcrumbs: ['Dashboard', 'Bank Accounts', 'Create Beneficiary']
+        },
+        loadComponent: () =>
+          import('./features/bank-accounts/create-beneficiary-page.component').then(
+            (m) => m.CreateBeneficiaryPageComponent
+          )
+      },
+      {
+        path: 'bank-accounts/load-money',
+        title: 'Load Money',
+        data: {
+          label: 'Load Money',
+          breadcrumbs: ['Dashboard', 'Bank Accounts', 'Load Money']
+        },
+        loadComponent: () =>
+          import('./features/load-money/load-money-page.component').then((m) => m.LoadMoneyPageComponent)
+      },
+      {
+        path: 'bank-accounts/load-money/payout',
+        title: 'Payout',
+        data: {
+          label: 'Payout',
+          breadcrumbs: ['Dashboard', 'Bank Accounts', 'Load Money', 'Payout']
+        },
+        loadComponent: () =>
+          import('./features/payout/payout-page.component').then((m) => m.PayoutPageComponent)
       },
       {
         path: 'kyc',
@@ -53,86 +105,48 @@ export const routes: Routes = [
           import('./features/structure/structure-page.component').then((m) => m.StructurePageComponent)
       },
       {
-        path: 'contacts',
-        title: 'Contacts',
-        data: { label: 'Contacts' },
-        loadComponent: () =>
-          import('./features/contacts/contacts-page.component').then((m) => m.ContactsPageComponent)
-      },
-      {
-        path: 'bank-accounts',
-        title: 'Bank Accounts',
-        data: { label: 'Bank Accounts' },
-        loadComponent: () =>
-          import('./features/bank-accounts/bank-accounts-page.component').then((m) => m.BankAccountsPageComponent)
-      },
-      {
-        path: 'bank-accounts/create-beneficiary',
-        title: 'Create Beneficiary',
-        data: {
-          label: 'Create Beneficiary',
-          breadcrumbs: ['Bank Accounts', 'Create Beneficiary']
-        },
-        loadComponent: () =>
-          import('./features/bank-accounts/create-beneficiary-page.component').then(
-            (m) => m.CreateBeneficiaryPageComponent
-          )
-      },
-      {
-        path: 'pay-bills',
-        title: 'Pay Bills',
-        data: { label: 'Pay Bills' },
-        loadComponent: () =>
-          import('./pages/pay-bills/pay-bills-page.component').then((m) => m.PayBillsPageComponent)
-      },
-      {
         path: 'my-bills',
         title: 'My Bills',
-        data: { label: 'My Bills' },
-        loadComponent: () => import('./features/bills/bills-page.component').then((m) => m.BillsPageComponent)
-      },
-      {
-        path: 'complaints',
-        title: 'Complaints',
-        data: { label: 'Complaints' },
-        loadComponent: () =>
-          import('./features/complaints/complaints-page.component').then((m) => m.ComplaintsPageComponent)
-      },
-      {
-        path: 'load-money',
-        title: 'Load Money',
-        data: { label: 'Load Money' },
-        loadComponent: () =>
-          import('./features/load-money/load-money-page.component').then((m) => m.LoadMoneyPageComponent)
-      },
-      {
-        path: 'payout',
-        title: 'Payout',
-        data: { label: 'Payout' },
-        loadComponent: () =>
-          import('./features/payout/payout-page.component').then((m) => m.PayoutPageComponent)
-      },
-      {
-        path: 'topup-requests',
-        title: 'Topup Requests',
         data: {
-          label: 'Topup Requests',
-          headline: 'Topup Requests',
-          description: 'Dummy topup requests page placeholder.'
+          label: 'My Bills',
+          breadcrumbs: ['Transactions', 'My Bills']
         },
-        loadComponent: () =>
-          import('./features/placeholder/placeholder-page.component').then((m) => m.PlaceholderPageComponent)
+        loadComponent: () => import('./features/bills/bills-page.component').then((m) => m.BillsPageComponent)
       },
       {
         path: 'reports',
         title: 'Reports',
         data: {
           label: 'Reports',
-          headline: 'Reports',
-          description: 'Dummy reports page placeholder.'
+          breadcrumbs: ['Transactions', 'Reports']
         },
         loadComponent: () =>
-          import('./features/placeholder/placeholder-page.component').then((m) => m.PlaceholderPageComponent)
+          import('./features/reports/reports-page.component').then((m) => m.ReportsPageComponent)
+      },
+      {
+        path: 'load-money',
+        pathMatch: 'full',
+        redirectTo: 'bank-accounts/load-money'
+      },
+      {
+        path: 'payout',
+        pathMatch: 'full',
+        redirectTo: 'bank-accounts/load-money/payout'
+      },
+      {
+        path: 'pay-bills',
+        pathMatch: 'full',
+        redirectTo: 'my-bills'
+      },
+      {
+        path: 'complaints',
+        pathMatch: 'full',
+        redirectTo: 'reports'
+      },
+      {
+        path: 'topup-requests',
+        pathMatch: 'full',
+        redirectTo: 'reports'
       }
     ]
   },

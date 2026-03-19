@@ -9,8 +9,12 @@
   gap: 18px;
   min-height: 62px;
   padding: 0 16px 0 20px;
-  background: #ffffff;
-  border-bottom: 1px solid rgba(149, 165, 207, 0.22);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(149, 165, 207, 0.18);
 }
 
 .header__brand,
@@ -29,15 +33,17 @@
   place-items: center;
   width: 34px;
   height: 34px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(17, 25, 44, 0.28), rgba(17, 25, 44, 0.86)),
-    linear-gradient(135deg, #f4c761, #b88428);
-  border: 2px solid rgba(255, 225, 156, 0.82);
-  color: #f9e7b6;
-  font-size: 0.62rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(28, 93, 153, 0.95), rgba(240, 138, 93, 0.88));
+  color: #f4fffb;
+  font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+}
+
+.header__brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .header__brand-text {
@@ -47,41 +53,27 @@
   letter-spacing: 0.01em;
 }
 
-.header__actions {
-  gap: 18px;
+.header__brand-subtitle {
+  color: var(--muted);
+  font-size: 0.8rem;
 }
 
-.header__info-link,
-.header__plain-icon {
+.header__actions {
+  gap: 16px;
+}
+
+.header__info-link {
   color: var(--primary);
 }
 
 .header__info-link {
   gap: 6px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(28, 93, 153, 0.06);
   font-size: 0.92rem;
   font-weight: 600;
-}
-
-.header__plain-icon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.header__notification-dot {
-  position: absolute;
-  top: 1px;
-  right: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #5a8df2;
 }
 
 .header__profile {
@@ -101,8 +93,8 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #c3cc88, #d9ddbf 70%);
-  color: #2f3e21;
+  background: linear-gradient(135deg, #ffd7b8, #f0a16d 70%);
+  color: #5d3217;
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -176,6 +168,7 @@
     gap: 12px;
   }
 
+  .header__brand-subtitle,
   .header__info-link span {
     display: none;
   }

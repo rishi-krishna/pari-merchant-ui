@@ -5,13 +5,13 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MerchantDataService } from '../../core/services/merchant-data.service';
 
 @Component({
-  selector: 'app-bills-page',
+  selector: 'app-reports-page',
   standalone: true,
   imports: [DatePipe, ReactiveFormsModule],
-  templateUrl: './bills-page.component.html',
-  styleUrl: './bills-page.component.scss'
+  templateUrl: './reports-page.component.html',
+  styleUrl: './reports-page.component.scss'
 })
-export class BillsPageComponent {
+export class ReportsPageComponent {
   private readonly fb = inject(FormBuilder);
   readonly data = inject(MerchantDataService);
 
@@ -22,15 +22,10 @@ export class BillsPageComponent {
   });
 
   readonly appliedFilters = signal(this.filterForm.getRawValue());
-
-  readonly bills = computed(() => {
+  readonly transactions = computed(() => {
     const filters = this.appliedFilters();
 
     return this.data.transactions().filter((transaction) => {
-      if (transaction.transactionType === 'Payout') {
-        return false;
-      }
-
       const typeMatch =
         !filters.type || transaction.transactionType.toLowerCase().includes(filters.type.toLowerCase());
       const statusMatch =
@@ -41,6 +36,10 @@ export class BillsPageComponent {
       return typeMatch && statusMatch && referenceMatch;
     });
   });
+
+  readonly totalVolume = computed(() =>
+    this.transactions().reduce((sum, transaction) => sum + transaction.amount, 0)
+  );
 
   constructor() {
     void this.data.loadTransactions().catch(() => undefined);

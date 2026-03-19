@@ -24,39 +24,33 @@ interface SidebarSection {
 export class SidebarComponent {
   readonly open = input(false);
   readonly mobile = input(false);
+  readonly collapsed = input(false);
   readonly itemSelected = output<void>();
 
   readonly sections: SidebarSection[] = [
     {
+      heading: 'Dashboard',
       items: [
-        { label: 'Dashboards', route: '/dashboard', icon: 'dashboard' },
+        { label: 'Overview', route: '/dashboard', icon: 'dashboard' },
+        { label: 'Contacts', route: '/dashboard/contacts', icon: 'contacts' },
+        { label: 'Bank Accounts', route: '/dashboard/bank-accounts', icon: 'bank' },
+        { label: 'Load Money', route: '/dashboard/bank-accounts/load-money', icon: 'card' },
+        { label: 'Payout', route: '/dashboard/bank-accounts/load-money/payout', icon: 'payout' }
+      ]
+    },
+    {
+      heading: 'Transactions',
+      items: [
+        { label: 'My Bills', route: '/dashboard/my-bills', icon: 'list' },
+        { label: 'Reports', route: '/dashboard/reports', icon: 'reports' }
+      ]
+    },
+    {
+      heading: 'Reference',
+      items: [
         { label: 'KYC', route: '/dashboard/kyc', icon: 'kyc' },
         { label: 'COM Calculator', route: '/dashboard/calculator', icon: 'calculator' },
         { label: 'COM Structure', route: '/dashboard/structure', icon: 'percent' }
-      ]
-    },
-    {
-      heading: 'User Management',
-      items: [
-        { label: 'Contacts', route: '/dashboard/contacts', icon: 'contacts' },
-        { label: 'Bank Accounts', route: '/dashboard/bank-accounts', icon: 'bank' }
-      ]
-    },
-    {
-      heading: 'Bill Payments',
-      items: [
-        { label: 'Pay Bills', route: '/dashboard/pay-bills', icon: 'receipt' },
-        { label: 'My Bills', route: '/dashboard/my-bills', icon: 'list' },
-        { label: 'Complaints', route: '/dashboard/complaints', icon: 'complaint' }
-      ]
-    },
-    {
-      heading: 'Payment Management',
-      items: [
-        { label: 'Load Money', route: '/dashboard/load-money', icon: 'card' },
-        { label: 'Payout', route: '/dashboard/payout', icon: 'payout' },
-        { label: 'Topup Requests', route: '/dashboard/topup-requests', icon: 'rupee' },
-        { label: 'Reports', route: '/dashboard/reports', icon: 'reports' }
       ]
     }
   ];

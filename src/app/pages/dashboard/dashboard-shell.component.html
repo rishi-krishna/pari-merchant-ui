@@ -1,37 +1,47 @@
 <div class="portal-shell">
   <app-header></app-header>
 
-  <div class="portal-shell__body">
-    <app-sidebar [mobile]="isMobile()" [open]="mobileSidebarOpen()" (itemSelected)="closeSidebar()"></app-sidebar>
+  <div class="portal-shell__body" [class.portal-shell__body--collapsed]="desktopSidebarCollapsed() && !isMobile()">
+    <app-sidebar
+      [mobile]="isMobile()"
+      [open]="mobileSidebarOpen()"
+      [collapsed]="desktopSidebarCollapsed() && !isMobile()"
+      (itemSelected)="closeSidebar()"
+    ></app-sidebar>
 
     @if (isMobile() && mobileSidebarOpen()) {
       <button class="portal-shell__scrim" type="button" (click)="closeSidebar()" aria-label="Close sidebar"></button>
     }
 
     <div class="portal-shell__main">
-      <div class="portal-shell__breadcrumb">
-        <button class="portal-shell__menu-button" type="button" (click)="toggleSidebar()">
+      <div class="portal-shell__toolbar">
+        <button
+          class="portal-shell__menu-button"
+          type="button"
+          (click)="toggleSidebar()"
+          [class.portal-shell__menu-button--active]="mobileSidebarOpen() || desktopSidebarCollapsed()"
+          aria-label="Toggle navigation"
+        >
           <span></span>
           <span></span>
           <span></span>
         </button>
-        <div class="portal-shell__crumbs">
-          @for (crumb of breadcrumbs(); track crumb; let last = $last) {
-            <span [class.portal-shell__crumb--current]="last">{{ crumb }}</span>
-            @if (!last) {
-              <span class="portal-shell__crumb-separator">/</span>
+        <div class="portal-shell__toolbar-copy">
+          <p class="portal-shell__eyebrow">Pari Control Center</p>
+          <div class="portal-shell__crumbs">
+            @for (crumb of breadcrumbs(); track crumb; let last = $last) {
+              <span [class.portal-shell__crumb--current]="last">{{ crumb }}</span>
+              @if (!last) {
+                <span class="portal-shell__crumb-separator">/</span>
+              }
             }
-          }
+          </div>
         </div>
       </div>
 
       <main class="portal-shell__content">
         <router-outlet></router-outlet>
       </main>
-
-      <footer class="portal-shell__footer">
-        <span>Copyright © 2026 SLPE. All rights reserved.</span>
-      </footer>
     </div>
   </div>
 </div>

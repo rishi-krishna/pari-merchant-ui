@@ -1,59 +1,76 @@
 <div class="page-stack">
-  <div class="dashboard-home__title-row">
+  <div class="page-title-group">
     <h1>Dashboard</h1>
-
-    <div class="dashboard-home__actions">
-      <button class="primary-button dashboard-home__action-button" type="button" (click)="openLoadMoney()">+ Load Money</button>
-      <button class="primary-button dashboard-home__action-button" type="button" (click)="openPayout()">+ Payout</button>
-    </div>
+    <p>Pari is now structured as a compact single-user payments workspace focused on saved contacts, beneficiaries, collections, and payouts.</p>
   </div>
 
-  <section class="panel dashboard-home__payment-link">
-    <div class="dashboard-home__payment-banner">
-      <div class="dashboard-home__payment-banner-title">
-        <span class="dashboard-home__chain-icon">Link</span>
-        <span>Your Unique Payment Link</span>
-      </div>
-
-      <button class="dashboard-home__share-button" type="button">Share with customers</button>
-    </div>
-
-    <div class="dashboard-home__payment-body">
-      <label class="dashboard-home__payment-label">PUBLIC URL</label>
-
-      <div class="dashboard-home__payment-row">
-        <div class="dashboard-home__payment-url">{{ paymentLink }}</div>
-
-        <div class="dashboard-home__payment-buttons">
-          <button class="dashboard-home__copy-button" type="button" (click)="copyLink()">Copy</button>
-          <button class="dashboard-home__outline-button" type="button" (click)="openLink()">Open</button>
-          <button class="dashboard-home__outline-button" type="button" (click)="toggleQr()">Show QR</button>
+  <section class="panel dashboard-home__hero">
+    <div class="dashboard-home__identity">
+      <div class="dashboard-home__identity-mark">P</div>
+      <div>
+        <p class="dashboard-home__eyebrow">Workspace Owner</p>
+        <h2>{{ auth.profileName() }}</h2>
+        <p class="dashboard-home__company">{{ companyName() }}</p>
+        <div class="pill-row">
+          <span class="pill">Merchant ID: {{ auth.userId() }}</span>
+          <span class="pill">Role: {{ auth.profileRole() }}</span>
         </div>
       </div>
+    </div>
 
-      <p class="dashboard-home__payment-note">Send this link to customers to collect payments directly.</p>
+    <div class="dashboard-home__quick-actions">
+      <button class="primary-button" type="button" (click)="openContacts()">Manage Contacts</button>
+      <button class="primary-button" type="button" (click)="openBeneficiaries()">Saved Beneficiaries</button>
+      <button class="primary-button" type="button" (click)="openLoadMoney()">Load Money</button>
+      <button class="ghost-button" type="button" (click)="openPayout()">Payout</button>
     </div>
   </section>
 
-  <section class="dashboard-home__overview">
-    <app-stat-card title="Wallet Amount" [value]="walletAmount()" icon="wallet" variant="gold"></app-stat-card>
-
-    <app-stat-card title="Held Balance" [value]="heldAmount()" icon="rupee" variant="blue" actionLabel="Add Money"></app-stat-card>
-  </section>
-
-  <section class="dashboard-home__cards">
-    @for (scheme of schemes; track scheme.id) {
-      <app-payment-card [scheme]="scheme"></app-payment-card>
-    }
-  </section>
-
-  @if (transactions().length) {
-    <section class="panel table-panel">
-      <div class="panel-header">
-        <h2 class="section-heading">Recent Transactions</h2>
-        <div class="pill">{{ transactions().length }} recent</div>
+  <section class="dashboard-home__summary-grid">
+    <article class="panel dashboard-home__summary-card">
+      <div class="dashboard-home__summary-icon">
+        <app-icon name="wallet" [size]="20"></app-icon>
       </div>
+      <p>Available Balance</p>
+      <strong>{{ walletAmount() }}</strong>
+      <span>Funds available to collect and settle</span>
+    </article>
 
+    <article class="panel dashboard-home__summary-card">
+      <div class="dashboard-home__summary-icon">
+        <app-icon name="rupee" [size]="20"></app-icon>
+      </div>
+      <p>Held Balance</p>
+      <strong>{{ heldAmount() }}</strong>
+      <span>Transactions waiting for completion</span>
+    </article>
+
+    <article class="panel dashboard-home__summary-card">
+      <div class="dashboard-home__summary-icon">
+        <app-icon name="contacts" [size]="20"></app-icon>
+      </div>
+      <p>Saved Contacts</p>
+      <strong>{{ contactsCount() }}</strong>
+      <span>Verified people available for collections</span>
+    </article>
+
+    <article class="panel dashboard-home__summary-card">
+      <div class="dashboard-home__summary-icon">
+        <app-icon name="bank" [size]="20"></app-icon>
+      </div>
+      <p>Beneficiaries</p>
+      <strong>{{ beneficiariesCount() }}</strong>
+      <span>Bank destinations ready for payouts</span>
+    </article>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-header">
+      <h2 class="section-heading">Recent Transactions</h2>
+      <div class="pill">{{ transactions().length }} recent</div>
+    </div>
+
+    @if (transactions().length) {
       <div class="table-scroll">
         <table class="data-table">
           <thead>
@@ -78,23 +95,11 @@
           </tbody>
         </table>
       </div>
-    </section>
-  }
+    } @else {
+      <div class="empty-state">
+        <h3>No transactions yet</h3>
+        <p>Your payment activity will appear here once you start collecting or sending funds.</p>
+      </div>
+    }
+  </section>
 </div>
-
-<app-announcement-popup
-  [announcement]="announcement"
-  [visible]="announcementVisible()"
-  (closed)="hideAnnouncement()"
-></app-announcement-popup>
-
-@if (qrOpen()) {
-  <div class="modal-overlay centered" (click)="toggleQr()">
-    <section class="dashboard-home__qr-modal panel" (click)="$event.stopPropagation()">
-      <button class="modal-close" type="button" (click)="toggleQr()">X</button>
-      <h2 class="section-heading">Payment QR Preview</h2>
-      <div class="dashboard-home__qr-box">QR</div>
-      <p class="dashboard-home__payment-note">{{ paymentLink }}</p>
-    </section>
-  </div>
-}
