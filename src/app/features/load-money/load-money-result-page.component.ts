@@ -41,7 +41,8 @@ export class LoadMoneyResultPageComponent {
 
     const query = this.route.snapshot.queryParamMap;
     const orderId = query.get('order_id') ?? query.get('orderId') ?? query.get('cf_order_id');
-    const providerTransactionId = query.get('transaction_id') ?? query.get('providerTransactionId');
+    const providerTransactionId =
+      query.get('transaction_id') ?? query.get('providerTransactionId') ?? query.get('cf_payment_id');
     const fallbackStatus = this.normalizeStatus(
       query.get('order_status') ?? query.get('txStatus') ?? query.get('status') ?? 'pending'
     );

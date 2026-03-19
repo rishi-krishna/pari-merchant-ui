@@ -2,8 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { cashfreeHostedCheckoutUrl } from '../../core/config/payment-gateway.config';
 import { Contact } from '../../core/models/merchant.models';
+import { CashfreeCheckoutService } from '../../core/services/cashfree-checkout.service';
 import { MerchantDataService } from '../../core/services/merchant-data.service';
 
 @Component({
@@ -18,11 +18,13 @@ export class LoadMoneyPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   readonly data = inject(MerchantDataService);
+  private readonly cashfreeCheckout = inject(CashfreeCheckoutService);
 
   readonly phoneLookupResult = signal<Contact | null>(null);
   readonly lookupMessage = signal('');
   readonly resultMessage = signal('');
   readonly resultError = signal(false);
+  readonly isSubmitting = signal(false);
   readonly paymentBanner = signal<{ status: string; message: string; orderId?: string; reference?: string } | null>(null);
   readonly gatewayOptions = ['Cashfree'];
 
@@ -77,7 +79,7 @@ export class LoadMoneyPageComponent {
     this.lookupMessage.set(`Contact verified for ${contact.name}.`);
   }
 
-  openGateway(): void {
+  async openGateway(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.resultError.set(true);
@@ -91,15 +93,34 @@ export class LoadMoneyPageComponent {
       return;
     }
 
-    if (cashfreeHostedCheckoutUrl.includes('replace-with-your-cashfree-link')) {
-      this.resultError.set(true);
-      this.resultMessage.set('Set your Cashfree hosted checkout URL in payment-gateway.config.ts before continuing.');
-      return;
-    }
-
+    this.isSubmitting.set(true);
     this.resultError.set(false);
-    this.resultMessage.set('Redirecting to Cashfree...');
-    window.location.href = cashfreeHostedCheckoutUrl;
+    this.resultMessage.set('Creating a secure Cashfree checkout session...');
+
+    try {
+      const order = await this.data.createCashfreeCheckoutOrder({
+        contactId: this.phoneLookupResult()!.id,
+        amount: Number(this.form.controls.amount.value),
+        currency: 'INR'
+      });
+
+      this.resultMessage.set('Opening Cashfree secure checkout...');
+      await this.cashfreeCheckout.openModal(order.paymentSessionId);
+
+      await this.router.navigate(['/dashboard/bank-accounts/load-money/result'], {
+        queryParams: {
+          orderId: order.orderId,
+          cf_order_id: order.cfOrderId
+        }
+      });
+    } catch (error) {
+      this.resultError.set(true);
+      this.resultMessage.set(
+        error instanceof Error ? error.message : 'Unable to open Cashfree checkout right now.'
+      );
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 
   dismissPaymentBanner(): void {

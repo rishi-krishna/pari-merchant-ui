@@ -1,2 +1,2 @@
-export const cashfreeHostedCheckoutUrl = 'https://payments-test.cashfree.com/forms/ccloadmoney';
-
+export const cashfreeSdkUrl = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+export const cashfreeCheckoutMode = 'sandbox' as const;

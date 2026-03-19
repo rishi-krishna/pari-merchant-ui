@@ -7,6 +7,7 @@ import {
   Announcement,
   BankAccount,
   BillHistory,
+  CashfreeCheckoutOrder,
   CommissionMethod,
   Complaint,
   Contact,
@@ -71,6 +72,13 @@ interface LoadMoneyResultResponse {
   reference: string | null;
   description: string | null;
   createdUtc: string | null;
+}
+
+interface CashfreeCheckoutOrderResponse {
+  orderId: string;
+  cfOrderId: string;
+  paymentSessionId: string;
+  reference: string;
 }
 
 interface KycDocumentResponse {
@@ -390,6 +398,18 @@ export class MerchantDataService {
           ...(providerTransactionId ? { providerTransactionId } : {})
         }
       })
+    );
+
+    return response;
+  }
+
+  async createCashfreeCheckoutOrder(payload: {
+    contactId: string;
+    amount: number;
+    currency: string;
+  }): Promise<CashfreeCheckoutOrder> {
+    const response = await firstValueFrom(
+      this.http.post<CashfreeCheckoutOrderResponse>(`${API_BASE_URL}/api/load-money/cashfree/order`, payload)
     );
 
     return response;

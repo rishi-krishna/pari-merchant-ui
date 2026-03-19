@@ -107,6 +107,11 @@
   cursor: pointer;
 }
 
+.load-money-card__submit:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
 @media (max-width: 640px) {
   .load-money-banner {
     flex-direction: column;

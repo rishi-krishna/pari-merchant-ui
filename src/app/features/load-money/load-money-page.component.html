@@ -1,7 +1,7 @@
 <div class="page-stack">
   <div class="page-title-group">
     <h1>Load Money</h1>
-    <p>Validate a saved contact, choose the payment gateway, and continue so the customer can send money from card or UPI into your Pari account.</p>
+    <p>Validate a saved contact, choose the payment gateway, and open a secure Cashfree checkout modal so the customer can pay by card or UPI into your Pari account.</p>
   </div>
 
   @if (paymentBanner(); as banner) {
@@ -75,7 +75,9 @@
         <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
       }
 
-      <button class="load-money-card__submit" type="button" (click)="openGateway()">Pay Now</button>
+      <button class="load-money-card__submit" type="button" [disabled]="isSubmitting()" (click)="openGateway()">
+        {{ isSubmitting() ? 'Opening Checkout...' : 'Pay Now' }}
+      </button>
     </form>
   </section>
 </div>

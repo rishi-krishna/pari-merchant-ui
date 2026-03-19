@@ -1,7 +1,7 @@
 <div class="page-stack">
   <div class="page-title-group">
     <h1>Payment Result</h1>
-    <p>Cashfree redirects back here after the customer finishes the payment form.</p>
+    <p>Cashfree checkout reports the payment result here while Pari verifies and syncs it.</p>
   </div>
 
   <section class="panel payment-result-card" [class]="statusClass()">
@@ -23,7 +23,7 @@
           @if (result.status === 'success') {
             Payment was confirmed by Cashfree and stored in Pari.
           } @else if (result.status === 'pending') {
-            We have not finished syncing the payment yet. Refresh in a few seconds if needed.
+            We have not finished syncing the payment yet. This can happen while Pari waits for the Cashfree webhook.
           } @else {
             Payment was not completed successfully.
           }
@@ -60,7 +60,7 @@
         </div>
         <div class="readonly-field">
           <span>Description</span>
-          <div class="readonly-value">{{ result.description || 'Cashfree payment form collection' }}</div>
+          <div class="readonly-value">{{ result.description || 'Cashfree hosted checkout collection' }}</div>
         </div>
         <div class="readonly-field">
           <span>Saved At</span>

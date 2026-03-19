@@ -159,3 +159,10 @@ export interface LoadMoneyResult {
   description: string | null;
   createdUtc: string | null;
 }
+
+export interface CashfreeCheckoutOrder {
+  orderId: string;
+  cfOrderId: string;
+  paymentSessionId: string;
+  reference: string;
+}
