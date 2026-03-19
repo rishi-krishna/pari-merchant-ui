@@ -17,6 +17,7 @@
   gap: 18px;
   min-height: calc(100vh - 62px);
   padding: 18px;
+  align-items: start;
 }
 
 .portal-shell__body--collapsed {
@@ -28,6 +29,17 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+app-sidebar {
+  position: sticky;
+  top: 80px;
+  align-self: start;
+  z-index: 20;
+}
+
+.portal-shell__body--collapsed app-sidebar {
+  width: auto;
 }
 
 .portal-shell__toolbar {
@@ -115,6 +127,11 @@
 }
 
 @media (max-width: 1100px) {
+  app-sidebar,
+  .portal-shell__body--collapsed app-sidebar {
+    position: static;
+  }
+
   .portal-shell__body {
     grid-template-columns: 1fr;
   }

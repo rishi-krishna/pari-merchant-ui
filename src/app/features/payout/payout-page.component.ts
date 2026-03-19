@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { BankAccount, Contact } from '../../core/models/merchant.models';
 import { MerchantDataService } from '../../core/services/merchant-data.service';
@@ -14,18 +15,22 @@ import { MerchantDataService } from '../../core/services/merchant-data.service';
 })
 export class PayoutPageComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
   readonly data = inject(MerchantDataService);
 
   readonly phoneLookupResult = signal<Contact | null>(null);
   readonly lookupMessage = signal('');
   readonly resultMessage = signal('');
   readonly resultError = signal(false);
+  readonly paymentOptions = ['Payout Gateway'];
+  readonly payoutModes = ['IMPS'];
 
   readonly form = this.fb.nonNullable.group({
     phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
     beneficiaryId: ['', Validators.required],
-    amount: [1000, [Validators.required, Validators.min(1)]],
-    purpose: ['Vendor settlement', Validators.required]
+    paymentOption: [this.paymentOptions[0], Validators.required],
+    mode: [this.payoutModes[0], Validators.required],
+    amount: [0, [Validators.required, Validators.min(1)]]
   });
 
   readonly beneficiaries = computed(() => {
@@ -36,13 +41,6 @@ export class PayoutPageComponent {
 
     return this.data.bankAccounts().filter((item) => item.contactId === contact.id);
   });
-
-  readonly recentPayouts = computed(() =>
-    this.data
-      .transactions()
-      .filter((item) => item.transactionType === 'Payout')
-      .slice(0, 8)
-  );
 
   constructor() {
     void Promise.all([this.data.loadBankAccounts(), this.data.loadWalletSummary(), this.data.loadTransactions()]).catch(
@@ -94,6 +92,12 @@ export class PayoutPageComponent {
       return;
     }
 
+    if (!this.beneficiaries().length) {
+      this.resultError.set(true);
+      this.resultMessage.set('No saved bank account is available for this contact. Add a beneficiary account first.');
+      return;
+    }
+
     this.resultMessage.set('');
     this.resultError.set(false);
 
@@ -103,7 +107,7 @@ export class PayoutPageComponent {
         beneficiaryId: value.beneficiaryId,
         amount: Number(value.amount),
         currency: 'INR',
-        purpose: value.purpose
+        purpose: `${value.paymentOption} - ${value.mode}`
       });
 
       this.resultMessage.set(`Payout ${transaction.externalReference} created successfully with status ${transaction.status}.`);
@@ -111,5 +115,13 @@ export class PayoutPageComponent {
       this.resultError.set(true);
       this.resultMessage.set('Unable to create payout. Confirm a validated beneficiary exists and wallet balance is sufficient.');
     }
+  }
+
+  openCreateBankAccount(): void {
+    void this.router.navigate(['/dashboard/bank-accounts/create-beneficiary']);
+  }
+
+  beneficiaryOptionLabel(beneficiary: BankAccount): string {
+    return `${beneficiary.accountHolderName} ${beneficiary.bankName} - A/C: ${beneficiary.accountNumber} - IFSC: ${beneficiary.ifsc}`;
   }
 }

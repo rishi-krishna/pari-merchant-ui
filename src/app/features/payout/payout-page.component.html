@@ -1,109 +1,109 @@
 <div class="page-stack">
   <div class="page-title-group">
     <h1>Payout</h1>
-    <p>Verify a saved contact, choose one of that contact's saved beneficiary accounts, and then send money to that bank account.</p>
+    <p>Select a verified contact, choose one of the saved bank accounts for that phone number, and start a payout.</p>
   </div>
 
-  <section class="panel feature-panel">
-    <div class="panel-header">
-      <h2 class="section-heading">Create Payout</h2>
-      <div class="pill">{{ data.walletAmountLabel() }} available</div>
-    </div>
+  <div class="payout-layout">
+    <div class="payout-layout__left">
+      <section class="panel payout-panel payout-panel--search">
+        <div class="payout-panel__header">
+          <h2>Search User</h2>
+        </div>
 
-    <form class="page-stack" [formGroup]="form">
-      <div class="filter-grid two-columns">
-        <div class="field">
-          <label for="payout-phone">Contact Phone</label>
-          <div class="payout-page__search-row">
-            <input id="payout-phone" type="text" formControlName="phoneNumber" placeholder="Enter saved contact phone" />
-            <button class="primary-button payout-page__search-button" type="button" (click)="searchContact()">Verify</button>
+        <div class="payout-panel__body">
+          <form [formGroup]="form">
+            <div class="field">
+              <label for="payout-phone">Phone Number:</label>
+              <div class="payout-page__search-row">
+                <input id="payout-phone" type="text" formControlName="phoneNumber" placeholder="Enter phone number" />
+                <button class="payout-page__search-button" type="button" (click)="searchContact()">Search</button>
+              </div>
+              @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
+                <p class="error-text">Enter a valid 10 digit phone number.</p>
+              }
+            </div>
+          </form>
+
+          <div class="payout-panel__contact-block">
+            <h3>Contact Information:</h3>
+
+            @if (phoneLookupResult(); as contact) {
+              <div class="payout-panel__contact-card">
+                <p><strong>Name:</strong> {{ contact.name }}</p>
+                <p><strong>Email:</strong> {{ contact.email }}</p>
+                <p><strong>Phone:</strong> {{ contact.phone }}</p>
+              </div>
+            } @else {
+              <div class="payout-panel__contact-card payout-panel__contact-card--empty">
+                <p>Search with a saved phone number to load the contact details here.</p>
+              </div>
+            }
+
+            @if (lookupMessage()) {
+              <p [class.error-text]="!phoneLookupResult()" [class.success-text]="!!phoneLookupResult()">{{ lookupMessage() }}</p>
+            }
           </div>
-          @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
-            <p class="error-text">Enter a valid 10 digit phone number.</p>
-          }
         </div>
-
-        <div class="field">
-          <label for="payout-beneficiary">Beneficiary Account</label>
-          <select id="payout-beneficiary" formControlName="beneficiaryId">
-            <option value="">Select beneficiary</option>
-            @for (beneficiary of beneficiaries(); track beneficiary.id) {
-              <option [value]="beneficiary.id">
-                {{ beneficiary.bankName }} | {{ beneficiary.accountNumber }} | {{ beneficiary.ifsc }}
-              </option>
-            }
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="payout-amount">Amount</label>
-          <input id="payout-amount" type="number" formControlName="amount" placeholder="Enter amount" />
-        </div>
-
-        <div class="field">
-          <label for="payout-purpose">Purpose</label>
-          <input id="payout-purpose" type="text" formControlName="purpose" placeholder="Settlement purpose" />
-        </div>
-      </div>
-
-      @if (lookupMessage()) {
-        <p [class.error-text]="!phoneLookupResult()" [class.success-text]="!!phoneLookupResult()">{{ lookupMessage() }}</p>
-      }
-
-      @if (phoneLookupResult(); as contact) {
-        <div class="helper-card">
-          <strong>{{ contact.name }}</strong>
-          <span>{{ contact.phone }} · {{ contact.email }}</span>
-          <span>{{ beneficiaries().length }} saved beneficiary account(s) available for payout.</span>
-        </div>
-      }
-
-      @if (resultMessage()) {
-        <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
-      }
-
-      <div class="form-actions">
-        <button class="primary-button" type="button" (click)="submit()">Create Payout</button>
-      </div>
-    </form>
-  </section>
-
-  <section class="panel table-panel">
-    <div class="panel-header">
-      <h2 class="section-heading">Recent Payouts</h2>
-      <div class="pill">{{ recentPayouts().length }} items</div>
+      </section>
     </div>
 
-    @if (recentPayouts().length) {
-      <div class="table-scroll">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Reference</th>
-              <th>Settlement</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (transaction of recentPayouts(); track transaction.id) {
-              <tr>
-                <td>{{ transaction.status }}</td>
-                <td>{{ data.formatCurrency(transaction.amount, transaction.currency) }}</td>
-                <td>{{ transaction.externalReference }}</td>
-                <td>{{ transaction.settlementStatus }}</td>
-                <td>{{ transaction.createdUtc | date: 'dd-MMM-yyyy hh:mm a' }}</td>
-              </tr>
+    <div class="payout-layout__right">
+      <section class="panel payout-panel payout-panel--beneficiary">
+        <div class="payout-panel__header">
+          <h2>Beneficiary List</h2>
+          <button class="payout-panel__add-bank" type="button" (click)="openCreateBankAccount()">Add Bank Account</button>
+        </div>
+
+        <form class="payout-panel__body payout-panel__form" [formGroup]="form">
+          <div class="field">
+            <label for="payout-beneficiary">Select Bank Account:</label>
+            <select id="payout-beneficiary" formControlName="beneficiaryId">
+              <option value="">Select saved bank account</option>
+              @for (beneficiary of beneficiaries(); track beneficiary.id) {
+                <option [value]="beneficiary.id">{{ beneficiaryOptionLabel(beneficiary) }}</option>
+              }
+            </select>
+            @if (phoneLookupResult() && !beneficiaries().length) {
+              <p class="error-text">No saved bank account is available for this phone number yet.</p>
             }
-          </tbody>
-        </table>
-      </div>
-    } @else {
-      <div class="empty-state">
-        <h3>No payouts yet</h3>
-        <p>Verify a contact, pick a beneficiary, and create a payout to see records here.</p>
-      </div>
-    }
-  </section>
+          </div>
+
+          <div class="field">
+            <label for="payout-payment-option">Payment Options:</label>
+            <select id="payout-payment-option" formControlName="paymentOption">
+              @for (option of paymentOptions; track option) {
+                <option [value]="option">{{ option }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="payout-mode">Mode:</label>
+            <select id="payout-mode" formControlName="mode">
+              @for (mode of payoutModes; track mode) {
+                <option [value]="mode">{{ mode }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="payout-amount">Amount:</label>
+            <input id="payout-amount" type="number" formControlName="amount" placeholder="0.00" />
+            @if (form.controls.amount.invalid && form.controls.amount.touched) {
+              <p class="error-text">Enter an amount greater than 0.</p>
+            }
+          </div>
+
+          @if (resultMessage()) {
+            <p [class.error-text]="resultError()" [class.success-text]="!resultError()">{{ resultMessage() }}</p>
+          }
+
+          <div class="payout-panel__submit-row">
+            <button class="payout-page__pay-button" type="button" (click)="submit()">Pay Now</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
 </div>

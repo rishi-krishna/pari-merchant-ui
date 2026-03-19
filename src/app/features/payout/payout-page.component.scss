@@ -2,14 +2,108 @@
   display: block;
 }
 
+.payout-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.45fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.payout-layout__left,
+.payout-layout__right {
+  min-width: 0;
+}
+
+.payout-panel {
+  overflow: hidden;
+  min-height: 100%;
+}
+
+.payout-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  background: linear-gradient(180deg, #2f67c8 0%, #2458b5 100%);
+  color: #ffffff;
+
+  h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+}
+
+.payout-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 22px 24px 24px;
+}
+
+.payout-panel__contact-block {
+  display: grid;
+  gap: 12px;
+
+  h3 {
+    margin: 0;
+    color: var(--muted-strong);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+}
+
+.payout-panel__contact-card {
+  padding: 16px 18px;
+  border: 1px solid rgba(196, 207, 221, 0.72);
+  border-radius: 14px;
+  background: #ffffff;
+
+  p {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: 0.98rem;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.payout-panel__contact-card--empty {
+  color: var(--muted);
+}
+
+.payout-panel__form {
+  gap: 18px;
+}
+
+.payout-panel__add-bank {
+  min-height: 38px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #5b6374;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .payout-page__search-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 110px;
 }
 
 .payout-page__search-button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  min-height: 54px;
+  border: 0;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+  background: linear-gradient(180deg, #2e98ec 0%, #237fd3 100%);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .payout-page__search-row input {
@@ -17,14 +111,55 @@
   border-bottom-right-radius: 0;
 }
 
+.payout-panel__submit-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.payout-page__pay-button {
+  min-width: 146px;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #93c63c 0%, #7fb328 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(127, 179, 40, 0.22);
+}
+
+@media (max-width: 1200px) {
+  .payout-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 640px) {
+  .payout-panel__header,
+  .payout-panel__body {
+    padding-inline: 18px;
+  }
+
+  .payout-panel__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .payout-page__search-row {
     grid-template-columns: 1fr;
     gap: 10px;
   }
 
-  .payout-page__search-button,
-  .payout-page__search-row input {
+  .payout-page__search-row input,
+  .payout-page__search-button {
     border-radius: 14px;
+  }
+
+  .payout-panel__add-bank,
+  .payout-page__pay-button {
+    width: 100%;
   }
 }
