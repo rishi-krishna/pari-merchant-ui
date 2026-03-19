@@ -4,6 +4,25 @@
     <p>Validate a saved contact, choose the payment gateway, and continue so the customer can send money from card or UPI into your Pari account.</p>
   </div>
 
+  @if (paymentBanner(); as banner) {
+    <div class="load-money-banner" [class.is-success]="banner.status === 'success'" [class.is-pending]="banner.status === 'pending'" [class.is-failed]="banner.status === 'failed'">
+      <div>
+        <strong>{{ banner.message }}</strong>
+        @if (banner.orderId || banner.reference) {
+          <p>
+            @if (banner.orderId) {
+              <span>Order ID: {{ banner.orderId }}</span>
+            }
+            @if (banner.reference) {
+              <span> Reference: {{ banner.reference }}</span>
+            }
+          </p>
+        }
+      </div>
+      <button type="button" class="load-money-banner__close" (click)="dismissPaymentBanner()">Close</button>
+    </div>
+  }
+
   <section class="panel load-money-card">
     <div class="load-money-card__header">Create Collection Request</div>
 

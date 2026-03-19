@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { cashfreeHostedCheckoutUrl } from '../../core/config/payment-gateway.config';
 import { Contact } from '../../core/models/merchant.models';
@@ -14,12 +15,15 @@ import { MerchantDataService } from '../../core/services/merchant-data.service';
 })
 export class LoadMoneyPageComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   readonly data = inject(MerchantDataService);
 
   readonly phoneLookupResult = signal<Contact | null>(null);
   readonly lookupMessage = signal('');
   readonly resultMessage = signal('');
   readonly resultError = signal(false);
+  readonly paymentBanner = signal<{ status: string; message: string; orderId?: string; reference?: string } | null>(null);
   readonly gatewayOptions = ['Cashfree'];
 
   readonly form = this.fb.nonNullable.group({
@@ -27,6 +31,27 @@ export class LoadMoneyPageComponent {
     gateway: ['', Validators.required],
     amount: ['', [Validators.required, Validators.min(1)]]
   });
+
+  constructor() {
+    const query = this.route.snapshot.queryParamMap;
+    const paymentMessage = query.get('paymentMessage');
+    const paymentStatus = query.get('paymentStatus');
+
+    if (paymentMessage && paymentStatus) {
+      this.paymentBanner.set({
+        status: paymentStatus,
+        message: paymentMessage,
+        orderId: query.get('orderId') ?? undefined,
+        reference: query.get('reference') ?? undefined
+      });
+
+      void this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        replaceUrl: true
+      });
+    }
+  }
 
   async searchContact(): Promise<void> {
     const phoneControl = this.form.controls.phoneNumber;
@@ -73,11 +98,11 @@ export class LoadMoneyPageComponent {
     }
 
     this.resultError.set(false);
-    this.resultMessage.set('Opening Cashfree checkout...');
-    const paymentWindow = window.open(cashfreeHostedCheckoutUrl, '_blank', 'noopener');
+    this.resultMessage.set('Redirecting to Cashfree...');
+    window.location.href = cashfreeHostedCheckoutUrl;
+  }
 
-    if (!paymentWindow) {
-      window.location.href = cashfreeHostedCheckoutUrl;
-    }
+  dismissPaymentBanner(): void {
+    this.paymentBanner.set(null);
   }
 }

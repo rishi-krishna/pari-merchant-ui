@@ -2,6 +2,51 @@
   display: block;
 }
 
+.load-money-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(28, 93, 153, 0.08);
+  border: 1px solid rgba(28, 93, 153, 0.14);
+
+  strong,
+  p {
+    margin: 0;
+  }
+
+  p {
+    margin-top: 6px;
+    color: var(--muted-strong);
+    font-size: 0.94rem;
+  }
+}
+
+.load-money-banner.is-success {
+  background: rgba(22, 129, 95, 0.1);
+  border-color: rgba(22, 129, 95, 0.18);
+}
+
+.load-money-banner.is-pending {
+  background: rgba(28, 93, 153, 0.08);
+  border-color: rgba(28, 93, 153, 0.14);
+}
+
+.load-money-banner.is-failed {
+  background: rgba(194, 61, 77, 0.1);
+  border-color: rgba(194, 61, 77, 0.16);
+}
+
+.load-money-banner__close {
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .load-money-card {
   max-width: 1000px;
   overflow: hidden;
@@ -63,6 +108,10 @@
 }
 
 @media (max-width: 640px) {
+  .load-money-banner {
+    flex-direction: column;
+  }
+
   .load-money-card__search-row {
     grid-template-columns: 1fr;
     gap: 10px;

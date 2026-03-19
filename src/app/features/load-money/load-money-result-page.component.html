@@ -1,0 +1,84 @@
+<div class="page-stack">
+  <div class="page-title-group">
+    <h1>Payment Result</h1>
+    <p>Cashfree redirects back here after the customer finishes the payment form.</p>
+  </div>
+
+  <section class="panel payment-result-card" [class]="statusClass()">
+    @if (loading()) {
+      <div class="payment-result-card__state">
+        <h2>Checking payment status...</h2>
+        <p>We are waiting for the Cashfree webhook to confirm and save the transaction.</p>
+      </div>
+    } @else if (error()) {
+      <div class="payment-result-card__state">
+        <h2>Unable to load payment result</h2>
+        <p class="error-text">{{ error() }}</p>
+      </div>
+    } @else if (result(); as result) {
+      <div class="payment-result-card__state">
+        <span class="payment-result-card__badge">{{ result.status | titlecase }}</span>
+        <h2>{{ result.message }}</h2>
+        <p>
+          @if (result.status === 'success') {
+            Payment was confirmed by Cashfree and stored in Pari.
+          } @else if (result.status === 'pending') {
+            We have not finished syncing the payment yet. Refresh in a few seconds if needed.
+          } @else {
+            Payment was not completed successfully.
+          }
+        </p>
+        @if (redirectCountdown() !== null && result.status !== 'failed') {
+          <p class="payment-result-card__redirect-note">
+            Returning to Load Money in {{ redirectCountdown() }} seconds...
+          </p>
+        }
+      </div>
+
+      <div class="payment-result-card__details">
+        <div class="readonly-field">
+          <span>Cashfree Order ID</span>
+          <div class="readonly-value">{{ result.orderId || 'Not available' }}</div>
+        </div>
+        <div class="readonly-field">
+          <span>Cashfree Transaction ID</span>
+          <div class="readonly-value">{{ result.providerTransactionId || 'Not available' }}</div>
+        </div>
+        <div class="readonly-field">
+          <span>Pari Reference</span>
+          <div class="readonly-value">{{ result.reference || 'Waiting for sync' }}</div>
+        </div>
+        <div class="readonly-field">
+          <span>Amount</span>
+          <div class="readonly-value">
+            @if (result.amount !== null) {
+              {{ data.formatCurrency(result.amount, result.currency) }}
+            } @else {
+              Waiting for sync
+            }
+          </div>
+        </div>
+        <div class="readonly-field">
+          <span>Description</span>
+          <div class="readonly-value">{{ result.description || 'Cashfree payment form collection' }}</div>
+        </div>
+        <div class="readonly-field">
+          <span>Saved At</span>
+          <div class="readonly-value">
+            @if (result.createdUtc) {
+              {{ result.createdUtc | date: 'medium' }}
+            } @else {
+              Waiting for sync
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-result-card__actions">
+        <button class="secondary-button" type="button" (click)="refresh()">Refresh Status</button>
+        <a class="secondary-button" routerLink="/dashboard/my-bills">View Transactions</a>
+        <a class="primary-button" routerLink="/dashboard/bank-accounts/load-money">Back to Load Money</a>
+      </div>
+    }
+  </section>
+</div>

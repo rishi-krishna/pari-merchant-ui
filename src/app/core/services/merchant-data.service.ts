@@ -13,6 +13,7 @@ import {
   CreatePaymentLinkRequest,
   KycInfo,
   LedgerEntry,
+  LoadMoneyResult,
   Scheme,
   TransactionRecord,
   WalletSummary
@@ -56,6 +57,20 @@ interface PaymentTransactionResponse {
   description: string;
   externalReference: string;
   providerReference: string;
+}
+
+interface LoadMoneyResultResponse {
+  found: boolean;
+  status: string;
+  message: string;
+  transactionId: string | null;
+  orderId: string | null;
+  providerTransactionId: string | null;
+  amount: number | null;
+  currency: string;
+  reference: string | null;
+  description: string | null;
+  createdUtc: string | null;
 }
 
 interface KycDocumentResponse {
@@ -365,6 +380,19 @@ export class MerchantDataService {
   async loadTransactions(): Promise<void> {
     const response = await firstValueFrom(this.http.get<TransactionRecord[]>(`${API_BASE_URL}/api/transactions`));
     this.transactionsState.set(response);
+  }
+
+  async getLoadMoneyResult(orderId?: string | null, providerTransactionId?: string | null): Promise<LoadMoneyResult> {
+    const response = await firstValueFrom(
+      this.http.get<LoadMoneyResultResponse>(`${API_BASE_URL}/api/load-money/result`, {
+        params: {
+          ...(orderId ? { orderId } : {}),
+          ...(providerTransactionId ? { providerTransactionId } : {})
+        }
+      })
+    );
+
+    return response;
   }
 
   async loadKycInfo(): Promise<void> {

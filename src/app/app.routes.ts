@@ -75,6 +75,16 @@ export const routes: Routes = [
           import('./features/load-money/load-money-page.component').then((m) => m.LoadMoneyPageComponent)
       },
       {
+        path: 'bank-accounts/load-money/result',
+        title: 'Payment Result',
+        data: {
+          label: 'Payment Result',
+          breadcrumbs: ['Dashboard', 'Bank Accounts', 'Load Money', 'Payment Result']
+        },
+        loadComponent: () =>
+          import('./features/load-money/load-money-result-page.component').then((m) => m.LoadMoneyResultPageComponent)
+      },
+      {
         path: 'bank-accounts/load-money/payout',
         title: 'Payout',
         data: {

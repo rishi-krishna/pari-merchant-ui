@@ -145,3 +145,17 @@ export interface UserProfile {
   phone: string;
   email: string;
 }
+
+export interface LoadMoneyResult {
+  found: boolean;
+  status: 'success' | 'pending' | 'failed' | 'unknown' | string;
+  message: string;
+  transactionId: string | null;
+  orderId: string | null;
+  providerTransactionId: string | null;
+  amount: number | null;
+  currency: string;
+  reference: string | null;
+  description: string | null;
+  createdUtc: string | null;
+}
