@@ -2,57 +2,69 @@
   <div class="login-shell__orb login-shell__orb--one"></div>
   <div class="login-shell__orb login-shell__orb--two"></div>
 
-  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
-    <div class="login-card__brand">
-      <div class="login-card__logo">P</div>
-      <div>
-        <strong>Pari</strong>
-        <span>Payments Workspace</span>
+  <div class="login-card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="login-card__brand">
+        <div class="login-card__logo">P</div>
+        <div>
+          <strong>Pari</strong>
+          <span>Payments Workspace</span>
+        </div>
       </div>
-    </div>
 
-    <div class="login-card__header">
-      <h1>Sign in</h1>
-      <p>Access your workspace securely.</p>
-    </div>
-
-    <div class="login-card__field-group">
-      <label for="login-mobile">Mobile Number</label>
-      <div class="login-card__field">
-        <app-icon name="phone" [size]="18"></app-icon>
-        <input id="login-mobile" type="text" formControlName="mobileNumber" placeholder="Enter mobile number" />
+      <div class="login-card__header">
+        <h1>Sign in</h1>
+        <p>Access your workspace securely.</p>
       </div>
-      @if (form.controls.mobileNumber.invalid && form.controls.mobileNumber.touched) {
-        <p class="error-text login-card__error">Enter a valid 10 digit mobile number.</p>
+
+      <div class="login-card__field-group">
+        <label for="login-mobile">Mobile Number</label>
+        <div class="login-card__field">
+          <app-icon name="phone" [size]="18"></app-icon>
+          <input id="login-mobile" type="text" formControlName="mobileNumber" placeholder="Enter mobile number" />
+        </div>
+        @if (form.controls.mobileNumber.invalid && form.controls.mobileNumber.touched) {
+          <p class="error-text login-card__error">Enter a valid 10 digit mobile number.</p>
+        }
+      </div>
+
+      <div class="login-card__field-group">
+        <label for="login-password">Password</label>
+        <div class="login-card__field">
+          <app-icon name="lock" [size]="18"></app-icon>
+          <input id="login-password" type="password" formControlName="password" placeholder="Enter password" />
+        </div>
+        @if (form.controls.password.invalid && form.controls.password.touched) {
+          <p class="error-text login-card__error">Password is required.</p>
+        }
+      </div>
+
+      @if (errorMessage) {
+        <p class="error-text login-card__error login-card__error--server">{{ errorMessage }}</p>
       }
-    </div>
 
-    <div class="login-card__field-group">
-      <label for="login-password">Password</label>
-      <div class="login-card__field">
-        <app-icon name="lock" [size]="18"></app-icon>
-        <input id="login-password" type="password" formControlName="password" placeholder="Enter password" />
+      <div class="login-card__meta">
+        <label class="login-card__checkbox">
+          <input type="checkbox" formControlName="rememberMe" />
+          <span>Keep me signed in</span>
+        </label>
+
+        <button class="login-card__link" type="button">Forgot password?</button>
       </div>
-      @if (form.controls.password.invalid && form.controls.password.touched) {
-        <p class="error-text login-card__error">Password is required.</p>
-      }
+
+      <button class="login-card__submit" type="submit" [disabled]="auth.loading()">
+        {{ auth.loading() ? 'Signing in...' : 'Continue' }}
+      </button>
+    </form>
+
+    <div class="login-card__footer">
+      <p>Public policy pages for merchant review and payment-gateway whitelisting.</p>
+      <nav class="login-card__footer-links">
+        <a routerLink="/contact-us">Contact Us</a>
+        <a routerLink="/terms-and-conditions">Terms & Conditions</a>
+        <a routerLink="/refunds-and-cancellations">Refunds & Cancellations</a>
+        <a routerLink="/services">Products & Services</a>
+      </nav>
     </div>
-
-    @if (errorMessage) {
-      <p class="error-text login-card__error login-card__error--server">{{ errorMessage }}</p>
-    }
-
-    <div class="login-card__meta">
-      <label class="login-card__checkbox">
-        <input type="checkbox" formControlName="rememberMe" />
-        <span>Keep me signed in</span>
-      </label>
-
-      <button class="login-card__link" type="button">Forgot password?</button>
-    </div>
-
-    <button class="login-card__submit" type="submit" [disabled]="auth.loading()">
-      {{ auth.loading() ? 'Signing in...' : 'Continue' }}
-    </button>
-  </form>
+  </div>
 </div>

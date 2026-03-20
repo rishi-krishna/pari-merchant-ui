@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { AuthFlowService } from '../../core/services/auth-flow.service';
 import { AppIconComponent } from '../../shared/app-icon.component';
@@ -8,7 +8,7 @@ import { AppIconComponent } from '../../shared/app-icon.component';
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule, AppIconComponent],
+  imports: [ReactiveFormsModule, AppIconComponent, RouterLink],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })

@@ -1,0 +1,49 @@
+<div class="public-page">
+  <div class="public-page__orb public-page__orb--one"></div>
+  <div class="public-page__orb public-page__orb--two"></div>
+
+  <main class="public-page__card">
+    <div class="public-page__topbar">
+      <a class="public-page__back" routerLink="/login">Back to Login</a>
+      <div class="public-page__brand">
+        <strong>Pari</strong>
+        <span>Payments Workspace</span>
+      </div>
+    </div>
+
+    <div class="public-page__hero">
+      <span>{{ page().eyebrow }}</span>
+      <h1>{{ page().title }}</h1>
+      <p>{{ page().intro }}</p>
+    </div>
+
+    <nav class="public-page__nav">
+      <a routerLink="/contact-us">Contact Us</a>
+      <a routerLink="/terms-and-conditions">Terms & Conditions</a>
+      <a routerLink="/refunds-and-cancellations">Refunds & Cancellations</a>
+      <a routerLink="/services">Products & Services</a>
+    </nav>
+
+    <div class="public-page__sections">
+      @for (section of page().sections; track section.heading) {
+        <section class="public-page__section">
+          <h2>{{ section.heading }}</h2>
+
+          @if (section.paragraphs?.length) {
+            @for (paragraph of section.paragraphs; track paragraph) {
+              <p>{{ paragraph }}</p>
+            }
+          }
+
+          @if (section.bullets?.length) {
+            <ul>
+              @for (item of section.bullets; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          }
+        </section>
+      }
+    </div>
+  </main>
+</div>

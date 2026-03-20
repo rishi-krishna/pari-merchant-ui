@@ -9,6 +9,42 @@ export const routes: Routes = [
     redirectTo: 'login'
   },
   {
+    path: 'contact-us',
+    title: 'Contact Us',
+    loadComponent: () =>
+      import('./pages/public/public-info-page.component').then((m) => m.PublicInfoPageComponent),
+    data: {
+      pageKey: 'contact-us'
+    }
+  },
+  {
+    path: 'terms-and-conditions',
+    title: 'Terms & Conditions',
+    loadComponent: () =>
+      import('./pages/public/public-info-page.component').then((m) => m.PublicInfoPageComponent),
+    data: {
+      pageKey: 'terms-and-conditions'
+    }
+  },
+  {
+    path: 'refunds-and-cancellations',
+    title: 'Refunds & Cancellations',
+    loadComponent: () =>
+      import('./pages/public/public-info-page.component').then((m) => m.PublicInfoPageComponent),
+    data: {
+      pageKey: 'refunds-and-cancellations'
+    }
+  },
+  {
+    path: 'services',
+    title: 'Products & Services',
+    loadComponent: () =>
+      import('./pages/public/public-info-page.component').then((m) => m.PublicInfoPageComponent),
+    data: {
+      pageKey: 'services'
+    }
+  },
+  {
     path: 'login',
     title: 'Login',
     loadComponent: () => import('./pages/login/login-page.component').then((m) => m.LoginPageComponent)
